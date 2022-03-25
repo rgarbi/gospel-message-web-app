@@ -3,6 +3,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/login.component';
 import SignUp from './components/signup.component';
+import NewSubscriber from './components/new-subscriber.component'
 function App() {
   return (
     <Router>
@@ -34,6 +35,7 @@ function App() {
               <Route exact path='/' element={<Login />}></Route>
               <Route path='/sign-in' element={<Login />}></Route>
               <Route path='/sign-up' element={<SignUp />}></Route>
+              <Route path='/welcome' element={<NewSubscriber />}></Route>
             </Routes>
           </div>
         </div>

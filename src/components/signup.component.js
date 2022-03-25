@@ -5,28 +5,46 @@ import signUp from '../api/client';
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {
+      emailAddress: '',
+      password: ''
+    };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  updatePassword(event) {
+    const val = event.target.value;
+    this.setState({
+      password: val,
+    });
   }
 
-  handleSubmit(event) {
-    console.log(event);
+  updateEmail(event) {
+    const val = event.target.value;
+  
+    this.setState({
+      emailAddress: val,
+    });
+  }
 
-    let myForm = document.getElementById('signUpForm');
-    let formData = new FormData(myForm);
-    console.log(formData);
+  handleSubmitEditing(event) {
+    console.log('Submit Editing: ', event);
+  }
 
+  async handleSubmit(event) {
     let address = getServerAddress();
-    console.log(address);
-    
-    signUp(address, formData.get('emailAddress'), formData.get('username'));
-    event.preventDefault();
+    let response = await signUp(address, this.state.emailAddress, this.state.password);
+
+    if(response.statusCode < 300) {
+      console.log(response.object);
+    }
+
+    if(response.statusCode === 409) {
+        this.setState({
+          errorText: 'There is already an account with that Email Address.',
+        });
+    }
+
   }
 
   render() {
@@ -39,7 +57,8 @@ export default class SignUp extends Component {
             type='email'
             className='form-control'
             placeholder='Enter email'
-            onChange={this.handleChange} 
+            onChange={evt => this.updateEmail(evt)}
+            value={this.state.emailAddress}
             id='emailAddress'
           />
         </div>
@@ -49,11 +68,15 @@ export default class SignUp extends Component {
             type='password'
             className='form-control'
             placeholder='Enter password'
-            onChange={this.handleChange} 
+            onChange={evt => this.updatePassword(evt)}
+            value={this.state.password}
             id='password'
           />
         </div>
-        <input type='submit' className='btn btn-primary btn-block' value="Sign Up"/>
+        <p></p>
+        <div>{this.state.errorText}</div>
+        <p></p>
+        <input type="button" className='btn btn-primary btn-block' value="Sign Up" onClick={evt => this.handleSubmit(evt)}/>
         <p className='forgot-password text-right'>
           Already registered <a href='#'>sign in?</a>
         </p>
