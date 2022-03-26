@@ -2,28 +2,28 @@ import { combineReducers } from 'redux';
 const ADD_AUTH = 'ADD_AUTH';
 const CLEAR_AUTH = 'CLEAR_AUTH';
 
-export function addAuth(auth) {
+export function addToken(token) {
     return {
       type: ADD_AUTH,
-      auth,
+      token,
     }
 }
 
-export function clearAuth() {
+export function clearToken(token) {
     return {
       type: CLEAR_AUTH,
-      auth,
+      token,
     }
 }
 
-  const defaultAuth = {};
+  const defaultToken = {};
 
 
-  function auth(state=defaultAuth, action) {
+  function token(state=defaultToken, action) {
     switch (action.type) {
         case ADD_AUTH:
            let newState = { ...state};
-           newState = action.auth;
+           newState = action.token;
            return newState;
         case CLEAR_AUTH:
             let clearedAuth = { ...state};
@@ -34,8 +34,8 @@ export function clearAuth() {
       }
   }
 
-const authApp = combineReducers({
-    auth
+const tokenApp = combineReducers({
+  token
   });
   
-export default authApp;
+export default tokenApp;
