@@ -8,7 +8,7 @@ async function signUp(serverAddress, username, password) {
             'password': password
         }),
     })
-    .then(response => {return generateResponse(response)})
+    .then(response => { return generateResponse(response)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -16,16 +16,17 @@ async function signUp(serverAddress, username, password) {
 
 
 
-function generateResponse(response) {
+async function generateResponse(response) {
     let responseObject = {
         object: {},
         statusCode: 0
     }
-
+    
     if(response.ok) {
-        responseObject.object = response.json();
+        let responseJson = await response.json().then((data) => {return data});
+        responseObject.object = responseJson;
         responseObject.statusCode = response.status;
-        return response;
+        return responseObject;
     } else {
         responseObject.statusCode = response.status
         return responseObject;

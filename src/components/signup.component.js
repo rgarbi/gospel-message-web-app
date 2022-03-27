@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import getServerAddress from '../util/serverLocation';
 import signUp from '../api/client';
-import { addToken, storeEmailAddress, storePassword } from '../store/auth/token';
+import { addToken } from '../store/auth/token';
 
 export default function SignUp() {
 
@@ -12,34 +12,18 @@ export default function SignUp() {
   const state = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
 
-  const setEmail = (email) => {
-    console.log(email);
-    dispatch(storeEmailAddress(email));
-  };
-
-  const setPassword = (password) => {
-    console.log(password);
-    dispatch(storePassword(password));
-  };
-
   const handleSubmit = async (event) => {
-    console.log('HELLO')
     event.preventDefault();
-    
+
     console.log(emailAddress);
     console.log(password);
 
-    dispatch(storeEmailAddress(emailAddress));
-    dispatch(storePassword(password));
-
-    console.log('Token state: ', state);
-    console.log('Creds Store:', state.emailAddress, state.password);
+    console.log('Token state: ', state.token);
 
     let address = getServerAddress();
-    let response = await signUp(address, state.emailAddress, state.password);
+    let response = await signUp(address, emailAddress, password);
 
     if(response.statusCode < 300) {
-      console.log(response.object);
       dispatch(addToken(response.object));
     }
 
