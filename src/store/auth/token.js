@@ -1,6 +1,30 @@
 import { combineReducers } from 'redux';
 const ADD_AUTH = 'ADD_AUTH';
 const CLEAR_AUTH = 'CLEAR_AUTH';
+const STORE_EMAIL_ADDRESS = 'STORE_EMAIL_ADDRESS';
+const STORE_PASSWORD = 'STORE_PASSWORD';
+const CLEAR_CREDENTIALS = 'CLEAR_CREDENTIALS';
+
+export function storeEmailAddress(creds) {
+    return {
+      type: STORE_EMAIL_ADDRESS,
+      creds,
+    }
+}
+
+export function storePassword(creds) {
+  return {
+    type: STORE_PASSWORD,
+    creds,
+  }
+}
+
+export function clearCedentials(creds) {
+    return {
+      type: CLEAR_CREDENTIALS,
+      creds,
+    }
+}
 
 export function addToken(token) {
     return {
@@ -16,26 +40,46 @@ export function clearToken(token) {
     }
 }
 
-  const defaultToken = {};
+  const defaultState = {
+    emailAddress: '',
+    password: '',
+    token: {},
+  };
 
 
-  function token(state=defaultToken, action) {
+  function authReducer(state=defaultState, action) {
     switch (action.type) {
         case ADD_AUTH:
            let newState = { ...state};
-           newState = action.token;
+           newState.token = action.token;
            return newState;
         case CLEAR_AUTH:
             let clearedAuth = { ...state};
-            clearedAuth = {};
+            clearedAuth.token = {};
             return clearedAuth;
+        case STORE_EMAIL_ADDRESS:
+          let newEmailState = { ...state};
+          newEmailState.emailAddress = action.emailAddress;
+          console.log(newEmailState);
+          return newEmailState;
+        case STORE_PASSWORD:
+            let newPasswordState = { ...state};
+            newPasswordState.password = action.password;
+            return newPasswordState;
+        case CLEAR_CREDENTIALS:
+            let clearedCreds = { ...state};
+            clearedCreds = {
+              emailAddress: '',
+              password: '',
+            };
+            return clearedCreds;
         default:
           return state;
       }
   }
 
 const tokenApp = combineReducers({
-  token
+  authReducer
   });
   
 export default tokenApp;

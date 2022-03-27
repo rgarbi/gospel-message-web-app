@@ -3,15 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import getServerAddress from '../util/serverLocation';
 import signUp from '../api/client';
-import { addToken } from '../store/auth/token';
-import { storeEmailAddress, storePassword } from '../store/auth/credentials';
+import { addToken, storeEmailAddress, storePassword } from '../store/auth/token';
 
 export default function SignUp() {
 
-  //const [emailAddress, addEmail] = useState('');
-  //const [password, storePassword] = useState('');
-  const token = useSelector(state => state.token);
-  const creds = useSelector(state => state.credentials)
+  const [emailAddress, addEmail] = useState('');
+  const [password, addPassword] = useState('');
+  const state = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
 
   const setEmail = (email) => {
@@ -25,12 +23,20 @@ export default function SignUp() {
   };
 
   const handleSubmit = async (event) => {
+    console.log('HELLO')
     event.preventDefault();
-    console.log('Token state: ', token);
-    console.log('Creds Store:', creds);
+    
+    console.log(emailAddress);
+    console.log(password);
+
+    dispatch(storeEmailAddress(emailAddress));
+    dispatch(storePassword(password));
+
+    console.log('Token state: ', state);
+    console.log('Creds Store:', state.emailAddress, state.password);
 
     let address = getServerAddress();
-    let response = await signUp(address, creds.emailAddress, creds.password);
+    let response = await signUp(address, state.emailAddress, state.password);
 
     if(response.statusCode < 300) {
       console.log(response.object);
@@ -45,7 +51,7 @@ export default function SignUp() {
 
 
     return (
-      <form id="signUpForm">
+      <form id="signUpForm" onSubmit={handleSubmit}>
         <h3>Sign Up</h3>
         <div className='form-group'>
           <label>Email address</label>
@@ -53,8 +59,8 @@ export default function SignUp() {
             type='email'
             className='form-control'
             placeholder='Enter email'
-            onChange={evt => setEmail(evt.target.value)}
-            //value={emailAddress}
+            onChange={evt => addEmail(evt.target.value)}
+            value={emailAddress}
             id='emailAddress'
           />
         </div>
@@ -64,15 +70,15 @@ export default function SignUp() {
             type='password'
             className='form-control'
             placeholder='Enter password'
-            onChange={evt => setPassword(evt.target.value)}
-            //value={password}
+            onChange={evt => addPassword(evt.target.value)}
+            value={password}
             id='password'
           />
         </div>
         <p></p>
         <div>{}</div>
         <p></p>
-        <input type="button" className='btn btn-primary btn-block' value="Sign Up" onClick={evt => handleSubmit(evt)}/>
+        <input type="submit" className='btn btn-primary btn-block' value="Sign Up" />
         <p className='forgot-password text-right'>
           Already registered <a href='#'>sign in?</a>
         </p>
