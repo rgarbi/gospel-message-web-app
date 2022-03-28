@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import getServerAddress from '../util/serverLocation';
-import signUp from '../api/client';
+import {signUp, storeSubscriber} from '../api/client';
 import { addToken } from '../store/auth/token';
 
 export default function SignUp() {
 
+  const [lastName, addLastName] = useState('');
+  const [firstName, addFirstName] = useState('');
   const [emailAddress, addEmail] = useState('');
   const [password, addPassword] = useState('');
   const state = useSelector(state => state.authReducer);
@@ -24,7 +26,17 @@ export default function SignUp() {
     let response = await signUp(address, emailAddress, password);
 
     if(response.statusCode < 300) {
-      dispatch(addToken(response.object));
+      let token = response.object
+      dispatch(addToken(token));
+
+      let userId = token.user_id;
+      let authToken = token.token;
+
+      console.log('Sending: ', address, authToken, firstName, lastName, emailAddress, userId);
+      let storeSubscriberResponse = await storeSubscriber(address, authToken, firstName, lastName, emailAddress, userId)
+
+      console.log(storeSubscriberResponse.statusCode);
+
     }
 
     if(response.statusCode === 409) {
@@ -37,6 +49,28 @@ export default function SignUp() {
     return (
       <form id="signUpForm" onSubmit={handleSubmit}>
         <h3>Sign Up</h3>
+        <div className='form-group'>
+          <label>First Name</label>
+          <input
+            type='text'
+            className='form-control'
+            placeholder='Enter first name'
+            onChange={evt => addFirstName(evt.target.value)}
+            value={firstName}
+            id='firstName'
+          />
+        </div>
+        <div className='form-group'>
+          <label>Last Name</label>
+          <input
+            type='text'
+            className='form-control'
+            placeholder='Enter last name'
+            onChange={evt => addLastName(evt.target.value)}
+            value={lastName}
+            id='lastName'
+          />
+        </div>
         <div className='form-group'>
           <label>Email address</label>
           <input
