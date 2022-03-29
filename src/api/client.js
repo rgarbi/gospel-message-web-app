@@ -1,11 +1,13 @@
 
-async function signUp(serverAddress, username, password) {
+async function signUp(serverAddress, emailAddress, password, firstName, lastName) {
     return fetch(serverAddress + '/sign_up', { 
         method: 'POST',
         headers: new Headers({'Content-Type':'application/json'}),
         body: JSON.stringify({
-            'username': username,
-            'password': password
+            'email_address': emailAddress,
+            'password': password,
+            'first_name': firstName,
+            'last_name': lastName,
         }),
     })
     .then(response => { return generateResponse(response)})
@@ -14,18 +16,13 @@ async function signUp(serverAddress, username, password) {
     });
 }
 
-async function storeSubscriber(serverAddress, authToken, firstName, lastName, emailAddress, userId) {
-    return fetch(serverAddress + '/subscribers', { 
+async function logIn(serverAddress, emailAddress, password) {
+    return fetch(serverAddress + '/login', { 
         method: 'POST',
-        headers: new Headers([
-            ['Content-Type','application/json'],
-            ['Authorization', 'Bearer ' + authToken]
-        ]),
+        headers: new Headers({'Content-Type':'application/json'}),
         body: JSON.stringify({
-            'first_name': firstName,
-            'last_name': lastName,
             'email_address': emailAddress,
-            'user_id': userId,
+            'password': password,
         }),
     })
     .then(response => { return generateResponse(response)})
@@ -56,4 +53,4 @@ async function generateResponse(response) {
 
 
 
-export {signUp, storeSubscriber};
+export { signUp, logIn };

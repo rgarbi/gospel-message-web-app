@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import getServerAddress from '../util/serverLocation';
-import {signUp, storeSubscriber} from '../api/client';
+import { signUp } from '../api/client';
 import { addToken } from '../store/auth/token';
 
 export default function SignUp() {
@@ -23,20 +23,11 @@ export default function SignUp() {
     console.log('Token state: ', state.token);
 
     let address = getServerAddress();
-    let response = await signUp(address, emailAddress, password);
+    let response = await signUp(address, emailAddress, password, firstName, lastName);
 
     if(response.statusCode < 300) {
       let token = response.object
       dispatch(addToken(token));
-
-      let userId = token.user_id;
-      let authToken = token.token;
-
-      console.log('Sending: ', address, authToken, firstName, lastName, emailAddress, userId);
-      let storeSubscriberResponse = await storeSubscriber(address, authToken, firstName, lastName, emailAddress, userId)
-
-      console.log(storeSubscriberResponse.statusCode);
-
     }
 
     if(response.statusCode === 409) {
