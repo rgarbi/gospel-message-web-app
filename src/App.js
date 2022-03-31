@@ -1,34 +1,19 @@
 import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './components/login.component';
 import SignUp from './components/signup.component';
 import NewSubscriber from './components/new-subscriber.component'
+import Header from './components/header.component';
 function App() {
-  return (
-    <Router>
+
+  
+
+
+
+  return ( 
       <div className='App'>
-        <nav className='navbar navbar-expand-lg navbar-light fixed-top'>
-          <div className='container'>
-            <Link className='navbar-brand' to={'/sign-in'}>
-              Gospel Message Subscription
-            </Link>
-            <div className='collapse navbar-collapse' id='navbarTogglerDemo02'>
-              <ul className='navbar-nav ml-auto'>
-                <li className='nav-item'>
-                  <Link className='nav-link' to={'/sign-in'}>
-                    Login
-                  </Link>
-                </li>
-                <li className='nav-item'>
-                  <Link className='nav-link' to={'/sign-up'}>
-                    Sign up
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+        <Header />
         <div className='auth-wrapper'>
           <div className='auth-inner'>
             <Routes>
@@ -40,7 +25,6 @@ function App() {
           </div>
         </div>
       </div>
-    </Router>
   );
 }
 export default App;
