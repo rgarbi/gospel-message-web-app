@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
 import { logIn } from '../api/client';
@@ -11,6 +12,7 @@ export default function LogIn() {
   const [password, addPassword] = useState('');
   const state = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,6 +29,9 @@ export default function LogIn() {
       let token = response.object
       console.log(token);
       dispatch(addToken(token));
+
+      //route to new subscriber
+      navigate("/subscriber");
     }
 
     if(response.statusCode === 409) {

@@ -31,6 +31,20 @@ async function logIn(serverAddress, emailAddress, password) {
     });
 }
 
+async function getSubscriber(serverAddress, userId, token) {
+    return fetch(serverAddress + '/subscribers?user_id=' + userId, { 
+        method: 'GET',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
 
 async function generateResponse(response) {
@@ -53,4 +67,4 @@ async function generateResponse(response) {
 
 
 
-export { signUp, logIn };
+export { signUp, logIn, getSubscriber };
