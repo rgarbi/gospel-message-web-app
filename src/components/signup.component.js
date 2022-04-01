@@ -11,6 +11,7 @@ export default function SignUp() {
   const [firstName, addFirstName] = useState('');
   const [emailAddress, addEmail] = useState('');
   const [password, addPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const state = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
 
@@ -31,7 +32,7 @@ export default function SignUp() {
     }
 
     if(response.statusCode === 409) {
-      console.log('There is already an account with that Email Address.');
+      setErrorMessage('There is already an account with that Email Address.');
     }
 
   };
@@ -85,7 +86,7 @@ export default function SignUp() {
           />
         </div>
         <p></p>
-        <div>{}</div>
+        <div>{errorMessage}</div>
         <p></p>
         <input type="submit" className='btn btn-primary btn-block' value="Sign Up" />
         <p className='forgot-password text-right'>
