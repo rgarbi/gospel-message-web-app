@@ -10,6 +10,7 @@ import { addToken } from '../store/auth/token';
 export default function LogIn() {
   const [emailAddress, addEmail] = useState('');
   const [password, addPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const state = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -17,25 +18,18 @@ export default function LogIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(emailAddress);
-    console.log(password);
-
-    console.log('Token state: ', state.token);
-
     let address = getServerAddress();
     let response = await logIn(address, emailAddress, password);
 
     if(response.statusCode < 300) {
-      let token = response.object
-      console.log(token);
+      let token = response.object;
       dispatch(addToken(token));
-
-      //route to new subscriber
+      //route to subscriber
       navigate("/subscriber");
     }
 
-    if(response.statusCode === 409) {
-      console.log('There is already an account with that Email Address.');
+    if(response.statusCode > 399) {
+      setErrorMessage('Incorrect Email Address or Password.');
     }
 
   };
@@ -65,6 +59,9 @@ export default function LogIn() {
             id='password'
           />
         </div>
+        <p></p>
+        <div>{errorMessage}</div>
+        <p></p>
         <button type='submit' className='btn btn-primary btn-block'>
           Submit
         </button>

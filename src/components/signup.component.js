@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
 import { signUp } from '../api/client';
@@ -14,6 +15,7 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState('');
   const state = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,6 +31,9 @@ export default function SignUp() {
     if(response.statusCode < 300) {
       let token = response.object
       dispatch(addToken(token));
+
+      //route to subscriber
+      navigate("/subscriber");
     }
 
     if(response.statusCode === 409) {
