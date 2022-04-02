@@ -1,4 +1,4 @@
-export const UNPROTECTED_PATHS = ['/log-in', '/sign-up', '/'];
+export const UNPROTECTED_PATHS = ['/', '/forgot-password'];
 
 export default function canRoute(path, token) {
     console.log('Got called: ', path, token);

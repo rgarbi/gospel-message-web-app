@@ -6,7 +6,7 @@ export default function Header() {
     return (
         <nav className='navbar navbar-expand-lg navbar-light fixed-top'>
         <div className='container'>
-          <Link className='navbar-brand' to={'/log-in'}>
+          <Link className='navbar-brand' to={'/'}>
             Gospel Message Subscription
           </Link>
           <div className='collapse navbar-collapse' id='navbarTogglerDemo02'>

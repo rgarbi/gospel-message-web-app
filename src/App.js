@@ -1,18 +1,16 @@
 import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import Login from './components/login.component';
-import SignUp from './components/signup.component';
 import NewSubscriber from './components/new-subscriber.component'
 import Header from './components/header.component';
 import { useLocation } from 'react-router-dom';
 import canRoute from './util/authRouter';
 import { useSelector } from 'react-redux';
+import Auth from './Auth';
+import ForgotPassword from './components/forgot-password.component';
 
-
-const LOGIN_IN_PATH = '/log-in';
-const SIGN_UP_PATH = '/sign-up';
 const ROOT_PATH = '/';
+const FORGOT_PASSWORD = '/forgot-password'
 const SUBSCRIBER_PATH = '/subscriber';
 
 
@@ -36,10 +34,9 @@ export default function App() {
         <div className='auth-wrapper'>
           <div className='auth-inner'>
             <Routes>
-              <Route exact path={ROOT_PATH} element={<Login />}></Route>
-              <Route path={LOGIN_IN_PATH} element={<Login />}></Route>
-              <Route path={SIGN_UP_PATH} element={<SignUp />}></Route>
+              <Route exact path={ROOT_PATH} element={<Auth />}></Route>
               <Route path={SUBSCRIBER_PATH} element={<NewSubscriber />}></Route>
+              <Route path={FORGOT_PASSWORD} element={<ForgotPassword />}></Route>
             </Routes>
           </div>
         </div>

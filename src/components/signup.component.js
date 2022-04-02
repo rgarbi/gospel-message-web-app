@@ -54,7 +54,6 @@ export default function SignUp() {
             placeholder='Enter first name'
             onChange={evt => addFirstName(evt.target.value)}
             value={firstName}
-            id='firstName'
           />
         </div>
         <div className='form-group'>
@@ -65,7 +64,6 @@ export default function SignUp() {
             placeholder='Enter last name'
             onChange={evt => addLastName(evt.target.value)}
             value={lastName}
-            id='lastName'
           />
         </div>
         <div className='form-group'>
@@ -76,7 +74,6 @@ export default function SignUp() {
             placeholder='Enter email'
             onChange={evt => addEmail(evt.target.value)}
             value={emailAddress}
-            id='emailAddress'
           />
         </div>
         <div className='form-group'>
@@ -87,7 +84,6 @@ export default function SignUp() {
             placeholder='Enter password'
             onChange={evt => addPassword(evt.target.value)}
             value={password}
-            id='password'
           />
         </div>
         <p></p>

@@ -31,6 +31,20 @@ async function logIn(serverAddress, emailAddress, password) {
     });
 }
 
+async function forgotPassword(serverAddress, emailAddress) {
+    return fetch(serverAddress + '/forgot_password', { 
+        method: 'POST',
+        headers: new Headers({'Content-Type':'application/json'}),
+        body: JSON.stringify({
+            'email_address': emailAddress,
+        }),
+    })
+    .then(response => { return generateResponse(response)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 async function getSubscriber(serverAddress, userId, token) {
     return fetch(serverAddress + '/subscribers?user_id=' + userId, { 
         method: 'GET',
@@ -67,4 +81,4 @@ async function generateResponse(response) {
 
 
 
-export { signUp, logIn, getSubscriber };
+export { signUp, logIn, getSubscriber, forgotPassword };

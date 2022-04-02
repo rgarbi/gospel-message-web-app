@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
 import getServerAddress from '../util/serverLocation';
+import { forgotPassword } from '../api/client';
 
 
-export default function LogIn() {
+export default function ForgotPassword() {
   const [emailAddress, addEmail] = useState('');
   const [message, setMessage] = useState('');
 
@@ -45,10 +46,6 @@ export default function LogIn() {
         <button type='submit' className='btn btn-primary btn-block'>
           Submit
         </button>
-        <p className='forgot-password text-right'>
-          Forgot <a href='#'>password?</a>
-        </p>
       </form>
     );
-  
 }

@@ -45,6 +45,7 @@ export default function LogIn() {
             placeholder='Enter email'
             onChange={evt => addEmail(evt.target.value)}
             value={emailAddress}
+            id='emailAddress'
           />
         </div>
         <div className='form-group'>
@@ -55,6 +56,7 @@ export default function LogIn() {
             placeholder='Enter password'
             onChange={evt => addPassword(evt.target.value)}
             value={password}
+            id='password'
           />
         </div>
         <p></p>
@@ -64,7 +66,7 @@ export default function LogIn() {
           Submit
         </button>
         <p className='forgot-password text-right'>
-          Forgot <a href='/forgot-password'>password?</a>
+          Forgot <a href='#'>password?</a>
         </p>
       </form>
     );
