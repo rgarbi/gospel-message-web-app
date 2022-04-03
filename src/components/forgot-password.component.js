@@ -10,16 +10,20 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if(emailAddress.length > 0) {
+      let address = getServerAddress();
+      let response = await forgotPassword(address, emailAddress);
+      let message = 'If a user with that email exists we have sent them instructions for resetting their password.';
 
-    let address = getServerAddress();
-    let response = await forgotPassword(address, emailAddress);
+      if(response.statusCode < 300) {
+        setMessage(message);
+        addEmail('');
+      }
 
-    if(response.statusCode < 300) {
-      setMessage('If a user with that email exists we have sent them instructions for resetting their password.');
-    }
-
-    if(response.statusCode > 399) {
-      setMessage('Something went wrong');
+      if(response.statusCode > 399) {
+        setMessage(message);
+        addEmail('');
+      }
     }
 
   };
@@ -37,7 +41,6 @@ export default function ForgotPassword() {
             placeholder='Enter email'
             onChange={evt => addEmail(evt.target.value)}
             value={emailAddress}
-            id='emailAddress'
           />
         </div>
         <p></p>
