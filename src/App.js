@@ -8,9 +8,11 @@ import canRoute from './util/authRouter';
 import { useSelector } from 'react-redux';
 import Auth from './Auth';
 import ForgotPassword from './components/forgot-password.component';
+import ResetPassword from './components/reset-password.component';
 
 const ROOT_PATH = '/';
 const FORGOT_PASSWORD = '/forgot-password'
+const RESET_PASSWORD = '/reset-password'
 const SUBSCRIBER_PATH = '/subscriber';
 
 
@@ -37,6 +39,7 @@ export default function App() {
               <Route exact path={ROOT_PATH} element={<Auth />}></Route>
               <Route path={SUBSCRIBER_PATH} element={<NewSubscriber />}></Route>
               <Route path={FORGOT_PASSWORD} element={<ForgotPassword />}></Route>
+              <Route path={RESET_PASSWORD} element={<ResetPassword />}></Route>
             </Routes>
           </div>
         </div>

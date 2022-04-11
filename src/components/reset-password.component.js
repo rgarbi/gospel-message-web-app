@@ -1,35 +1,71 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
-import { logIn } from '../api/client';
-import { addToken } from '../store/auth/token';
+import { exchangeOtpForToken, forgotPasswordResetPassword } from '../api/client';
+import { clearToken } from '../store/auth/token';
 
 
-export default function LogIn() {
-  const [emailAddress, addEmail] = useState('');
-  const [password, addPassword] = useState('');
+export default function ResetPassword() {
+  const [password, setPassword] = useState('');
+  const [userId, setUserId] = useState('');
+  const [tempToken, setTempToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const state = useSelector(state => state.authReducer);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const dispatch = useDispatch();
   let navigate = useNavigate();
+
+
+  React.useEffect(() => {
+    console.log('Use effect ran');
+    const validateOTP = async () => {
+      let address = getServerAddress();
+      let otp = searchParams.get("otp");
+
+      if(!otp) {
+        navigate("/");
+      } else {
+
+        const response = await exchangeOtpForToken(address, otp);
+
+        if(response.statusCode > 300) {
+          console.log('yup, bad code');
+          setErrorMessage('Something something try again.')
+        }
+
+        if(response.statusCode < 300) {
+          let token = response.object;
+          setTempToken(token.token);
+          setUserId(token.user_id);
+        }
+
+      }
+      
+    };
+
+    
+    validateOTP();
+    
+  }, [navigate, searchParams]);
+
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     let address = getServerAddress();
-    let response = await logIn(address, emailAddress, password);
+    let response = await forgotPasswordResetPassword(address, tempToken, userId, password);
 
     if(response.statusCode < 300) {
-      let token = response.object;
-      dispatch(addToken(token));
-      //route to subscriber
-      navigate("/subscriber");
+      dispatch(clearToken());
+      //route to home
+      navigate("/");
     }
 
     if(response.statusCode > 399) {
-      setErrorMessage('Incorrect Email Address or Password.');
+      setErrorMessage('Something happened!');
     }
 
   };
@@ -38,23 +74,12 @@ export default function LogIn() {
   return (
       <form  onSubmit={handleSubmit}>
         <div className='form-group'>
-          <label>Email address</label>
-          <input
-            type='email'
-            className='form-control'
-            placeholder='Enter email'
-            onChange={evt => addEmail(evt.target.value)}
-            value={emailAddress}
-            id='emailAddress'
-          />
-        </div>
-        <div className='form-group'>
           <label>Password</label>
           <input
             type='password'
             className='form-control'
             placeholder='Enter password'
-            onChange={evt => addPassword(evt.target.value)}
+            onChange={evt => setPassword(evt.target.value)}
             value={password}
             id='password'
           />
@@ -65,9 +90,6 @@ export default function LogIn() {
         <button type='submit' className='btn btn-primary btn-block'>
           Submit
         </button>
-        <p className='forgot-password text-right'>
-          Forgot <a href='#'>password?</a>
-        </p>
       </form>
     );
   

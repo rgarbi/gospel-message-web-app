@@ -45,6 +45,35 @@ async function forgotPassword(serverAddress, emailAddress) {
     });
 }
 
+async function exchangeOtpForToken(serverAddress, otp) {
+    return fetch(serverAddress + '/forgot_password/otp/' + otp, { 
+        method: 'GET',
+        headers: new Headers({'Content-Type':'application/json'}),
+    })
+    .then(response => { return generateResponse(response)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+async function forgotPasswordResetPassword(serverAddress, token, userId, password) {
+    return fetch(serverAddress + '/forgot_password/reset_password', { 
+        method: 'POST',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+        body: JSON.stringify({
+            'user_id': userId,
+            'new_password': password,
+        }),
+    })
+    .then(response => { return generateResponse(response)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 async function getSubscriber(serverAddress, userId, token) {
     return fetch(serverAddress + '/subscribers?user_id=' + userId, { 
         method: 'GET',
@@ -81,4 +110,4 @@ async function generateResponse(response) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword };
