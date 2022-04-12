@@ -30,7 +30,7 @@ export default function NewSubscriber() {
 
     fetchSubscriber();
     
-  });
+  }, [state.token.user_id, state.token.token]);
 
 
     return (
