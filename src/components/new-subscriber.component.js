@@ -11,8 +11,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 export default function NewSubscriber() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [name, setName] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
   const [subscriberId, setSubscriberId] = useState('');
   const [subscriptions, setSubscriptions] = useState([]);
@@ -27,8 +26,7 @@ export default function NewSubscriber() {
 
       if(response.statusCode < 300) {
         let subscriber = response.object;
-        setFirstName(subscriber.first_name);
-        setLastName(subscriber.last_name);
+        setName(subscriber.name);
         setEmailAddress(subscriber.email_address);
         setSubscriberId(subscriber.id);
         console.log(subscriber);
@@ -53,12 +51,11 @@ export default function NewSubscriber() {
           <Col>
             <Card style={{textAlign:'left'}}>
               <Card.Body>
-                <Card.Title>Welcome {firstName}</Card.Title>
+                <Card.Title>Welcome {name}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">Subscriber Details</Card.Subtitle>
               </Card.Body>
               <ListGroup className="list-group-flush">
-                    <ListGroup.Item>First Name: {firstName}</ListGroup.Item>
-                    <ListGroup.Item>Last Name: {lastName}</ListGroup.Item>
+                    <ListGroup.Item>Name: {name}</ListGroup.Item>
                     <ListGroup.Item>Email Address: {emailAddress}</ListGroup.Item>
                     <ListGroup.Item>Subscriber ID: {subscriberId}</ListGroup.Item>
               </ListGroup>
@@ -79,8 +76,7 @@ export default function NewSubscriber() {
                         <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
                         <Card>
                           <ListGroup>
-                            <ListGroup.Item>First Name: {subscription.subscription_first_name}</ListGroup.Item>
-                            <ListGroup.Item>Last Name: {subscription.subscription_last_name}</ListGroup.Item>
+                            <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
                             <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
                             <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
                             <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>

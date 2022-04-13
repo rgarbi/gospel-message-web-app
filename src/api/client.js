@@ -1,15 +1,12 @@
-import tokenApp from '../store/auth/token';
-import { clearToken } from '../store/auth/token';
 
-async function signUp(serverAddress, emailAddress, password, firstName, lastName) {
+async function signUp(serverAddress, emailAddress, password, name) {
     return fetch(serverAddress + '/sign_up', { 
         method: 'POST',
         headers: new Headers({'Content-Type':'application/json'}),
         body: JSON.stringify({
             'email_address': emailAddress,
             'password': password,
-            'first_name': firstName,
-            'last_name': lastName,
+            'name': name,
         }),
     })
     .then(response => { return generateResponse(response)})

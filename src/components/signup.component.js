@@ -8,8 +8,7 @@ import { addToken } from '../store/auth/token';
 
 export default function SignUp() {
 
-  const [lastName, addLastName] = useState('');
-  const [firstName, addFirstName] = useState('');
+  const [name, addName] = useState('');
   const [emailAddress, addEmail] = useState('');
   const [password, addPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,7 +25,7 @@ export default function SignUp() {
     console.log('Token state: ', state.token);
 
     let address = getServerAddress();
-    let response = await signUp(address, emailAddress, password, firstName, lastName);
+    let response = await signUp(address, emailAddress, password, name);
 
     if(response.statusCode < 300) {
       let token = response.object
@@ -47,23 +46,13 @@ export default function SignUp() {
       <form id="signUpForm" onSubmit={handleSubmit}>
         <h3>Sign Up</h3>
         <div className='form-group'>
-          <label>First Name</label>
+          <label>Name</label>
           <input
             type='text'
             className='form-control'
-            placeholder='Enter first name'
-            onChange={evt => addFirstName(evt.target.value)}
-            value={firstName}
-          />
-        </div>
-        <div className='form-group'>
-          <label>Last Name</label>
-          <input
-            type='text'
-            className='form-control'
-            placeholder='Enter last name'
-            onChange={evt => addLastName(evt.target.value)}
-            value={lastName}
+            placeholder='John Smith'
+            onChange={evt => addName(evt.target.value)}
+            value={name}
           />
         </div>
         <div className='form-group'>
