@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
-import { getSubscriber, getSubscriptionsBySubscriberId } from '../api/client';
-import Card  from 'react-bootstrap/Card';
-import ListGroup  from 'react-bootstrap/ListGroup';
+import { getSubscriber, addSubscription } from '../api/client';
+import Form  from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
-export default function AddScubscription() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [emailAddress, setEmailAddress] = useState('');
+export default function NewSubscription() {
+  let navigate = useNavigate();
   const [subscriberId, setSubscriberId] = useState('');
-  const [subscriptions, setSubscriptions] = useState([]);
 
+  const [name, setName] = useState('');
+  const [mailingAddressLine1, setMailingAddressLine1] = useState('');
+  const [mailingAddressLine2, setMailingAddressLine2] = useState('');
+  const [city, setCity] = useState('');
+  const [province, setProvince] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [subscriptionType, setSubscriptionType] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  
   const state = useSelector(state => state.authReducer);
   
 
@@ -27,17 +33,10 @@ export default function AddScubscription() {
 
       if(response.statusCode < 300) {
         let subscriber = response.object;
-        setFirstName(subscriber.first_name);
-        setLastName(subscriber.last_name);
-        setEmailAddress(subscriber.email_address);
+  
         setSubscriberId(subscriber.id);
         console.log(subscriber);
 
-        let subscriptions_response = await getSubscriptionsBySubscriberId(address, subscriber.id);
-
-        if(subscriptions_response.statusCode < 300) {
-          setSubscriptions(subscriptions_response.object);
-        }
       }
     };
 
@@ -45,64 +44,75 @@ export default function AddScubscription() {
     
   }, [state.token.user_id, state.token.token]);
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    return (
-      <Container>
-        <p></p>
-        <Row>
-          <Col>
-            <Card style={{textAlign:'left'}}>
-              <Card.Body>
-                <Card.Title>Welcome {firstName}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">Subscriber Details</Card.Subtitle>
-              </Card.Body>
-              <ListGroup className="list-group-flush">
-                    <ListGroup.Item>First Name: {firstName}</ListGroup.Item>
-                    <ListGroup.Item>Last Name: {lastName}</ListGroup.Item>
-                    <ListGroup.Item>Email Address: {emailAddress}</ListGroup.Item>
-                    <ListGroup.Item>Subscriber ID: {subscriberId}</ListGroup.Item>
-              </ListGroup>
-            </Card>
-          </Col>
-        </Row>
-        <p></p>
-        <Card>
-          <Card.Header style={{textAlign:'left'}}>Subscriptions</Card.Header>
-          <Card.Body>
-            {
-              subscriptions.map(function(subscription){
-                return <Row key={subscription.id}>
-                  <Col>
-                    <Card style={{textAlign:'left'}}>
-                      <Card.Body>
-                        <Card.Title>Subscription for: {subscription.subscription_first_name} {subscription.subscription_last_name}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
-                        <Card>
-                          <ListGroup>
-                            <ListGroup.Item>First Name: {subscription.subscription_first_name}</ListGroup.Item>
-                            <ListGroup.Item>Last Name: {subscription.subscription_last_name}</ListGroup.Item>
-                            <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
-                            <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
-                            <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>
-                            <ListGroup.Item>State: {subscription.subscription_state}</ListGroup.Item>
-                            <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
-                            <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
-                            <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
-                            <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
-                            <ListGroup.Item>Active: {subscription.active}</ListGroup.Item>
-                          </ListGroup>
-                        </Card>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <p></p>
-                </Row>
-              })
-            }
-            <Button variant="primary">Add Subscription</Button>
-          </Card.Body>
-        </Card>
-      </Container>
-    );
+    let address = getServerAddress();
+    let response = await addSubscription(address, state.token.token, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, province, postalCode, emailAddress, subscriptionType);
+
+    if(response.statusCode < 300) {
+      //route to subscriber
+      navigate("/subscriber");
+    }
+
+    if(response.statusCode > 399) {
+      setErrorMessage('Incorrect Email Address or Password.');
+    }
+
+  };
+
+  return (
+    <Container>
+      <Card style={{textAlign:'left'}}>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" placeholder="John Smith" onChange={evt => setName(evt.target.value)} value={name} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Mailing Address Line 1</Form.Label>
+            <Form.Control type="text" placeholder="123 Main" onChange={evt => setMailingAddressLine1(evt.target.value)} value={mailingAddressLine1} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Mailing Address Line 2</Form.Label>
+            <Form.Control type="text" placeholder="Suite 200" onChange={evt => setMailingAddressLine2(evt.target.value)} value={mailingAddressLine2} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>City</Form.Label>
+            <Form.Control type="text" placeholder="City" onChange={evt => setCity(evt.target.value)} value={city} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>State</Form.Label>
+            <Form.Control type="text" placeholder="State" onChange={evt => setProvince(evt.target.value)} value={province} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Postal Code</Form.Label>
+            <Form.Control type="text" placeholder="12345" onChange={evt => setPostalCode(evt.target.value)} value={postalCode} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control type="email" placeholder="Email Address" onChange={evt => setEmailAddress(evt.target.value)} value={emailAddress} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Subscription Type</Form.Label>
+            <p></p>
+            <Form.Check inline label="Electronic" name="group1" type="radio" onChange={evt => setSubscriptionType('Electronic')} />
+            <Form.Check inline label="Physical" name="group1" type="radio" onChange={evt => setSubscriptionType('Physical')} />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </Card>
+    </Container>
+  );
   
 };

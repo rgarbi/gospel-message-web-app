@@ -9,11 +9,13 @@ import { useSelector } from 'react-redux';
 import Auth from './Auth';
 import ForgotPassword from './components/forgot-password.component';
 import ResetPassword from './components/reset-password.component';
+import NewSubscription from './components/add-subscription.component';
 
 const ROOT_PATH = '/';
 const FORGOT_PASSWORD = '/forgot-password'
 const RESET_PASSWORD = '/reset-password'
 const SUBSCRIBER_PATH = '/subscriber';
+const NEW_SUBSCRIPTION = '/new-subscription';
 
 
 export default function App() {
@@ -38,6 +40,7 @@ export default function App() {
           <Route path={SUBSCRIBER_PATH} element={<NewSubscriber />}></Route>
           <Route path={FORGOT_PASSWORD} element={<ForgotPassword />}></Route>
           <Route path={RESET_PASSWORD} element={<ResetPassword />}></Route>
+          <Route path={NEW_SUBSCRIPTION} element={<NewSubscription />}></Route>
         </Routes>
           
       </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
 import { getSubscriber, getSubscriptionsBySubscriberId } from '../api/client';
@@ -17,6 +18,7 @@ export default function NewSubscriber() {
   const [subscriptions, setSubscriptions] = useState([]);
 
   const state = useSelector(state => state.authReducer);
+  let navigate = useNavigate();
   
 
   React.useEffect(() => {
@@ -42,6 +44,10 @@ export default function NewSubscriber() {
     fetchSubscriber();
     
   }, [state.token.user_id, state.token.token]);
+
+  let routeToNewSubscription = function() {
+    navigate("/new-subscription");
+  };
 
 
     return (
@@ -95,7 +101,7 @@ export default function NewSubscriber() {
                 </Row>
               })
             }
-            <Button variant="primary">Add Subscription</Button>
+            <Button variant="primary" onClick={routeToNewSubscription}>Add Subscription</Button>
           </Card.Body>
         </Card>
       </Container>
