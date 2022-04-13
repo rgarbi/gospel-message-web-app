@@ -4,7 +4,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import NewSubscriber from './components/new-subscriber.component'
 import Header from './components/header.component';
 import { useLocation } from 'react-router-dom';
-import canRoute from './util/authRouter';
+import { canRoute } from './util/authRouter';
 import { useSelector } from 'react-redux';
 import Auth from './Auth';
 import ForgotPassword from './components/forgot-password.component';
@@ -33,16 +33,13 @@ export default function App() {
   return ( 
       <div className='App'>
         <Header />
-        <div className='auth-wrapper'>
-          <div className='auth-inner'>
-            <Routes>
-              <Route exact path={ROOT_PATH} element={<Auth />}></Route>
-              <Route path={SUBSCRIBER_PATH} element={<NewSubscriber />}></Route>
-              <Route path={FORGOT_PASSWORD} element={<ForgotPassword />}></Route>
-              <Route path={RESET_PASSWORD} element={<ResetPassword />}></Route>
-            </Routes>
-          </div>
-        </div>
+        <Routes>
+          <Route exact path={ROOT_PATH} element={<Auth />}></Route>
+          <Route path={SUBSCRIBER_PATH} element={<NewSubscriber />}></Route>
+          <Route path={FORGOT_PASSWORD} element={<ForgotPassword />}></Route>
+          <Route path={RESET_PASSWORD} element={<ResetPassword />}></Route>
+        </Routes>
+          
       </div>
   );
 };

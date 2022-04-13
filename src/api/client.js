@@ -1,3 +1,5 @@
+import tokenApp from '../store/auth/token';
+import { clearToken } from '../store/auth/token';
 
 async function signUp(serverAddress, emailAddress, password, firstName, lastName) {
     return fetch(serverAddress + '/sign_up', { 
@@ -88,6 +90,20 @@ async function getSubscriber(serverAddress, userId, token) {
     });
 }
 
+async function getSubscriptionsBySubscriberId(serverAddress, subscriberId, token) {
+    return fetch(serverAddress + '/subscribers/' + subscriberId + '/subscriptions', { 
+        method: 'GET',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
 
 async function generateResponse(response) {
@@ -102,6 +118,11 @@ async function generateResponse(response) {
         responseObject.statusCode = response.status;
         return responseObject;
     } else {
+
+        if(response.status === 401) {
+            window.location.replace(window.location.origin);
+        }
+
         responseObject.statusCode = response.status
         return responseObject;
     }
@@ -110,4 +131,4 @@ async function generateResponse(response) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId };

@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
 import { logIn } from '../api/client';
-import { addToken } from '../store/auth/token';
+import { addToken, clearToken } from '../store/auth/token'; 
+import { isTokenEmpty, tokenIsExpired } from '../util/authRouter';
 
 
 export default function LogIn() {
@@ -14,6 +15,22 @@ export default function LogIn() {
   const state = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
   let navigate = useNavigate();
+
+  React.useEffect(() => {
+    const checkForAGoodToken = async () => {
+
+      if(isTokenEmpty(state.token)) {
+        //DO NOTHING
+      } else {
+          if(tokenIsExpired(state.token)) {
+            dispatch(clearToken({}));
+          }
+      }
+    };
+
+    checkForAGoodToken();
+    
+  }, [state.token, dispatch]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
