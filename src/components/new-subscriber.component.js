@@ -91,7 +91,7 @@ export default function NewSubscriber() {
                             <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
                             <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
                             <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
-                            <ListGroup.Item>Active: {subscription.active}</ListGroup.Item>
+                            <ListGroup.Item>Active: {subscription.active + ''}</ListGroup.Item>
                           </ListGroup>
                         </Card>
                       </Card.Body>
