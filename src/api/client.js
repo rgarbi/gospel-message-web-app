@@ -126,6 +126,33 @@ async function addSubscription(serverAddress, token, subscriberId, name, mailing
     });
 }
 
+async function initiateCheckout(serverAddress, token, userId, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, state, postalCode, emailAddress, subscriptionType, priceLookupKey) {
+    return fetch(serverAddress + '/checkout/' + userId, { 
+        method: 'POST',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+        body: JSON.stringify({
+            'price_lookup_key': priceLookupKey,
+            'subscription': {
+                'subscriber_id': subscriberId,
+                'subscription_name': name,
+                'subscription_mailing_address_line_1': mailingAddressLine1,
+                'subscription_mailing_address_line_2': mailingAddressLine2,
+                'subscription_city': city,
+                'subscription_state': state,
+                'subscription_postal_code': postalCode,
+                'subscription_email_address': emailAddress,
+                'subscription_type': subscriptionType,
+        },}),
+    })
+    .then(response => { return generateResponse(response)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
 
 async function generateResponse(response) {
@@ -153,4 +180,4 @@ async function generateResponse(response) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout };

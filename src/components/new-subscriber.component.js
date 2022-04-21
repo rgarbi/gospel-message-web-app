@@ -33,7 +33,7 @@ export default function NewSubscriber() {
         setSubscriberId(subscriber.id);
         console.log(subscriber);
 
-        let subscriptions_response = await getSubscriptionsBySubscriberId(address, subscriber.id);
+        let subscriptions_response = await getSubscriptionsBySubscriberId(address, subscriber.id, state.token.token);
 
         if(subscriptions_response.statusCode < 300) {
           setSubscriptions(subscriptions_response.object);

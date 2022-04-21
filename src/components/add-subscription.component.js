@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
-import { getSubscriber, addSubscription } from '../api/client';
+import { getSubscriber, initiateCheckout } from '../api/client';
 import Form  from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -48,7 +48,7 @@ export default function NewSubscription() {
     event.preventDefault();
 
     let address = getServerAddress();
-    let response = await addSubscription(address, state.token.token, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, province, postalCode, emailAddress, subscriptionType);
+    let response = await initiateCheckout(address, state.token.token, state.token.user_id, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, province, postalCode, emailAddress, subscriptionType, 'gmdigitalsub-test');
 
     if(response.statusCode < 300) {
       //route to subscriber
@@ -103,10 +103,10 @@ export default function NewSubscription() {
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Subscription Type</Form.Label>
             <p></p>
-            <Form.Check inline label="Electronic" name="group1" type="radio" onChange={evt => setSubscriptionType('Electronic')} />
-            <Form.Check inline label="Physical" name="group1" type="radio" onChange={evt => setSubscriptionType('Physical')} />
+            <Form.Check inline label="Digital" name="group1" type="radio" onChange={evt => setSubscriptionType('Digital')} />
+            <Form.Check inline label="Paper" name="group1" type="radio" onChange={evt => setSubscriptionType('Paper')} />
           </Form.Group>
-
+          
           <Button variant="primary" type="submit">
             Submit
           </Button>
