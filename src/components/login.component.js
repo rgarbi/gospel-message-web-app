@@ -18,19 +18,22 @@ export default function LogIn() {
 
   React.useEffect(() => {
     const checkForAGoodToken = async () => {
+      console.log('checking for a token: ', state.token);
 
       if(isTokenEmpty(state.token)) {
         //DO NOTHING
       } else {
           if(tokenIsExpired(state.token)) {
             dispatch(clearToken({}));
+          } else {
+            navigate("/subscriber");
           }
       }
     };
 
     checkForAGoodToken();
     
-  }, [state.token, dispatch]);
+  }, [state.token, dispatch, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

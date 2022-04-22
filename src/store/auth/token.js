@@ -24,7 +24,6 @@ export function clearToken(token) {
 
 
   function authReducer(state=defaultState, action) {
-    
     switch (action.type) {
         case ADD_AUTH:
            let newState = { ...state};
