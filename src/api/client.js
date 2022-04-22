@@ -127,7 +127,7 @@ async function addSubscription(serverAddress, token, subscriberId, name, mailing
 }
 
 async function initiateCheckout(serverAddress, token, userId, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, state, postalCode, emailAddress, subscriptionType, priceLookupKey) {
-    return fetch(serverAddress + '/checkout/' + userId, { 
+    return fetch(serverAddress + '/checkout/' + userId, {
         method: 'POST',
         headers: new Headers([
             ['Content-Type', 'application/json'],
@@ -147,7 +147,9 @@ async function initiateCheckout(serverAddress, token, userId, subscriberId, name
                 'subscription_type': subscriptionType,
         },}),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { 
+        return generateResponse(response)
+    })
     .catch(error => {
         console.error('Error:', error);
     });

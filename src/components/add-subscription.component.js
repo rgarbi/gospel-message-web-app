@@ -51,8 +51,8 @@ export default function NewSubscription() {
     let response = await initiateCheckout(address, state.token.token, state.token.user_id, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, province, postalCode, emailAddress, subscriptionType, 'gmdigitalsub-test');
 
     if(response.statusCode < 300) {
-      //route to subscriber
-      navigate("/subscriber");
+      console.log(response);
+      window.location.href = response.object.location;
     }
 
     if(response.statusCode > 399) {
