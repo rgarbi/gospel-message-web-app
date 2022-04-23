@@ -155,6 +155,22 @@ async function initiateCheckout(serverAddress, token, userId, subscriberId, name
     });
 }
 
+async function checkoutSuccess(serverAddress, token, userId, sessionId) {
+    return fetch(serverAddress + '/checkout/' + userId + '/session/' + sessionId, {
+        method: 'POST',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { 
+        return generateResponse(response)
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
 
 async function generateResponse(response) {
@@ -182,4 +198,4 @@ async function generateResponse(response) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess };

@@ -18,8 +18,7 @@ export default function LogIn() {
 
   React.useEffect(() => {
     const checkForAGoodToken = async () => {
-      console.log('checking for a token: ', state.token);
-
+      
       if(isTokenEmpty(state.token)) {
         //DO NOTHING
       } else {
@@ -44,7 +43,7 @@ export default function LogIn() {
     if(response.statusCode < 300) {
       let token = response.object;
       dispatch(addToken(token));
-      //route to subscriber
+      
       navigate("/subscriber");
     }
 

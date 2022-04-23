@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Card  from 'react-bootstrap/Card';
@@ -7,15 +7,16 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import getServerAddress from '../util/serverLocation';
+import {checkoutSuccess} from '../api/client';
+
 
 export default function CheckoutSuccess() {
-  const [password, setPassword] = useState('');
-  const [userId, setUserId] = useState('');
   const [sessionId, setSessionId] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const dispatch = useDispatch();
+  const state = useSelector(state => state.authReducer);
   let navigate = useNavigate();
 
 
@@ -24,6 +25,7 @@ export default function CheckoutSuccess() {
     const validateOTP = async () => {
       
       let sessionIdFromParam = searchParams.get("session_id");
+      let address = getServerAddress();
 
       if(!sessionIdFromParam) {
         navigate("/");
@@ -31,6 +33,10 @@ export default function CheckoutSuccess() {
         console.log('GOT THE SESSION ID: ' + sessionIdFromParam);
         setSessionId(sessionIdFromParam);
         //Probably will need to post to the server to complete the transaction on our side.
+        let response = await checkoutSuccess(address, state.token.token, state.token.user_id, sessionIdFromParam);
+        if(response.statusCode < 300) {
+          navigate("/subscriber");
+        }
       }
       
     };
