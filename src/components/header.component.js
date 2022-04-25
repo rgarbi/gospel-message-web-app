@@ -9,15 +9,18 @@ export default function Header() {
   return (
     <div>
     <Navbar expand="lg" background-color="#ffffff">
-      <Container>
+      
+      <Container className="float-left">
         <Navbar.Brand href={'/'}><img src="/logo.png" alt="The Gospel Message Logo"></img></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="d-flex">
+        <div class="float-right">
+        <Navbar.Collapse id="basic-navbar-nav" className="float-right">
+          <Nav className="float-right">
             <Nav.Link href={'/'}>Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link href={'/'}>Log Out</Nav.Link>
           </Nav>
         </Navbar.Collapse>
+        </div>
       </Container>
     </Navbar>
     </div>
