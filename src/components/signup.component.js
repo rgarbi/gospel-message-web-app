@@ -80,7 +80,7 @@ export default function SignUp() {
         <p></p>
         <input type="submit" className='btn btn-primary btn-block' value="Sign Up" />
         <p className='forgot-password text-right'>
-          Already registered <a href='#'>sign in?</a>
+          Already registered <a href='/'>sign in?</a>
         </p>
       </form>
     );
