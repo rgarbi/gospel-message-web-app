@@ -78,7 +78,7 @@ export default function NewSubscriber() {
                   <Col>
                     <Card style={{textAlign:'left'}}>
                       <Card.Body>
-                        <Card.Title>Subscription for: {subscription.subscription_first_name} {subscription.subscription_last_name}</Card.Title>
+                        <Card.Title>Subscription for: {subscription.subscription_name}</Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
                         <Card>
                           <ListGroup>
