@@ -8,6 +8,8 @@ import Form  from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 export default function NewSubscription() {
   let navigate = useNavigate();
@@ -62,9 +64,12 @@ export default function NewSubscription() {
   };
 
   return (
-    <Container>
+    <Container className='gx-1'>
+      <p></p>
+      <Row>
       <Card style={{textAlign:'left'}}>
-        <Form onSubmit={handleSubmit}>
+      <p></p>
+        <Form onSubmit={handleSubmit} >
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Name</Form.Label>
             <Form.Control type="text" placeholder="John Smith" onChange={evt => setName(evt.target.value)} value={name} />
@@ -110,8 +115,10 @@ export default function NewSubscription() {
           <Button variant="primary" type="submit">
             Submit
           </Button>
+          <p></p>
         </Form>
       </Card>
+      </Row>
     </Container>
   );
   
