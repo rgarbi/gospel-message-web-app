@@ -12,7 +12,6 @@ import { loadState, saveState } from './localStorage';
 const store = configureStore({reducer: authApp, preloadedState: loadState(),});
 
 store.subscribe(() => {
-  console.log('in the subscribe func');
   saveState(store.getState());
 });
 

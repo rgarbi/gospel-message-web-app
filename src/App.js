@@ -26,8 +26,6 @@ export default function App() {
 
   const location = useLocation();
   React.useEffect(() => {
-    // runs on location, i.e. route, change
-    console.log('handle route change here', location)
     if(!canRoute(location.pathname, state.token)) {
       navigate("/");
     }
