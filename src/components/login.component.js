@@ -82,7 +82,7 @@ export default function LogIn() {
         <button type='submit' className='btn btn-primary btn-block'>
           Submit
         </button>
-        <p className='forgot-password text-right'>
+        <p className='forgot-password'>
           Forgot <a href='/forgot-password'>password?</a>
         </p>
       </form>
