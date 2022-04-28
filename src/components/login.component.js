@@ -56,6 +56,8 @@ export default function LogIn() {
 
   return (
       <form  onSubmit={handleSubmit}>
+        <h4>Log In</h4>
+        <p>Already have an account? Please log in to manage your subscription.</p>
         <div className='form-group'>
           <label>Email address</label>
           <input
