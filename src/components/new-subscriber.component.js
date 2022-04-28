@@ -58,19 +58,13 @@ export default function NewSubscriber() {
             <Card style={{textAlign:'left'}}>
               <Card.Body>
                 <Card.Title>Welcome {name}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">Subscriber Details</Card.Subtitle>
               </Card.Body>
-              <ListGroup className="list-group-flush">
-                    <ListGroup.Item>Name: {name}</ListGroup.Item>
-                    <ListGroup.Item>Email Address: {emailAddress}</ListGroup.Item>
-                    <ListGroup.Item>Subscriber ID: {subscriberId}</ListGroup.Item>
-              </ListGroup>
             </Card>
           </Col>
         </Row>
         <p></p>
         <Card>
-          <Card.Header style={{textAlign:'left'}}>Subscriptions</Card.Header>
+          <Card.Header style={{textAlign:'left'}}>Subscriptions to the Gospel Message</Card.Header>
           <Card.Body>
             {
               subscriptions.map(function(subscription){
