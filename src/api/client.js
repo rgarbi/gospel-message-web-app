@@ -9,7 +9,7 @@ async function signUp(serverAddress, emailAddress, password, name) {
             'name': name,
         }),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -24,7 +24,7 @@ async function logIn(serverAddress, emailAddress, password) {
             'password': password,
         }),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -38,7 +38,7 @@ async function forgotPassword(serverAddress, emailAddress) {
             'email_address': emailAddress,
         }),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -49,7 +49,7 @@ async function exchangeOtpForToken(serverAddress, otp) {
         method: 'GET',
         headers: new Headers({'Content-Type':'application/json'}),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -67,7 +67,7 @@ async function forgotPasswordResetPassword(serverAddress, token, userId, passwor
             'new_password': password,
         }),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -81,7 +81,7 @@ async function getSubscriber(serverAddress, userId, token) {
             ['Authorization', 'Bearer ' + token],
         ]),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -95,7 +95,7 @@ async function getSubscriptionsBySubscriberId(serverAddress, subscriberId, token
             ['Authorization', 'Bearer ' + token],
         ]),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -120,7 +120,7 @@ async function addSubscription(serverAddress, token, subscriberId, name, mailing
             'subscription_type': subscriptionType,
         }),
     })
-    .then(response => { return generateResponse(response)})
+    .then(response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
     });
@@ -148,7 +148,7 @@ async function initiateCheckout(serverAddress, token, userId, subscriberId, name
         },}),
     })
     .then(response => { 
-        return generateResponse(response)
+        return generateResponse(response, true)
     })
     .catch(error => {
         console.error('Error:', error);
@@ -164,16 +164,43 @@ async function checkoutSuccess(serverAddress, token, userId, sessionId) {
         ]),
     })
     .then(response => { 
-        return generateResponse(response)
+        return generateResponse(response, true)
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
 
+async function manageStripeSubscription(serverAddress, token, userId) {
+    return fetch(serverAddress + '/checkout/'+ userId + '/manage', { 
+        method: 'POST',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response, true)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+async function checkToken(serverAddress, token, userId) {
+    return fetch(serverAddress + '/check_token/'+ userId, { 
+        method: 'POST',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response, false)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
 
-async function generateResponse(response) {
+async function generateResponse(response, redirectOn401) {
     let responseObject = {
         object: {},
         statusCode: 0
@@ -185,11 +212,10 @@ async function generateResponse(response) {
         responseObject.statusCode = response.status;
         return responseObject;
     } else {
-
-        if(response.status === 401) {
+        if(response.status === 401 & redirectOn401) {
             window.location.replace(window.location.origin);
         }
-
+        
         responseObject.statusCode = response.status
         return responseObject;
     }
@@ -198,4 +224,4 @@ async function generateResponse(response) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken };

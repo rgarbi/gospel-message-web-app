@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
-import { logIn } from '../api/client';
+import { logIn, checkToken } from '../api/client';
 import { addToken, clearToken } from '../store/auth/token'; 
-import { isTokenEmpty, tokenIsExpired } from '../util/authRouter';
+import { isTokenEmpty, tokenIsExpired, validateCheckTokenResponseIs401 } from '../util/authRouter';
 
 
 export default function LogIn() {
@@ -22,7 +22,8 @@ export default function LogIn() {
       if(isTokenEmpty(state.token)) {
         //DO NOTHING
       } else {
-          if(tokenIsExpired(state.token)) {
+          let checkTokenResponse = await checkToken(getServerAddress(), state.token.token, state.token.user_id);
+          if(tokenIsExpired(state.token) || validateCheckTokenResponseIs401(checkTokenResponse)) {
             dispatch(clearToken({}));
           } else {
             navigate("/subscriber");

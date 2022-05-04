@@ -20,6 +20,14 @@ function isPathUnprotected(path) {
     return UNPROTECTED_PATHS.includes(path);
 }
 
+function validateCheckTokenResponseIs401(tokenResponse) {
+    if (tokenResponse.statusCode === 401) {
+        return true;
+    }
+
+    return false;
+}
+
 
 function isAGoodToken(token) {
     if (isTokenEmpty(token)) {
@@ -53,4 +61,4 @@ function tokenIsExpired(token) {
     return false;
 }
 
-export {canRoute, isTokenEmpty, tokenIsExpired};
+export {canRoute, isTokenEmpty, tokenIsExpired, validateCheckTokenResponseIs401 };

@@ -12,6 +12,10 @@ function getServerAddress() {
         return 'https://newsletter-signup-service.onrender.com';
     }
 
+    if(hostname.includes('subscribe.gospelmessage.net')) {
+        return 'https://api.gospelmessage.net';
+    }
+
     let host = protocol + '//' + hostname + ':8000'
     return host;
 }
