@@ -16,6 +16,9 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
+    domains:
+      - subscribe.gospelmessage.net
+    
   - type: web
     name: staging newsletter web app
     plan: starter
@@ -32,3 +35,5 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
+    domains:
+      - staging-subscribe.gospelmessage.net
