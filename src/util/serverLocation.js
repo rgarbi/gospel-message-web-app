@@ -4,8 +4,8 @@ function getServerAddress() {
     let protocol = currentLocation.protocol;
     let hostname = currentLocation.hostname;
 
-    if(hostname.includes('newsletter-web-app-cxqn.onrender.com')) {
-        return 'https://newsletter-signup-service-r8s5-cvp4.onrender.com';
+    if(hostname.includes('staging-newsletter-web-app.onrender.com')) {
+        return 'https://staging-newsletter-signup-service.onrender.com';
     }
 
     if(hostname.includes('newsletter-web-app.onrender.com')) {
