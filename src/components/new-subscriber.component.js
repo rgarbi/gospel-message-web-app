@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
-import { getSubscriber, getSubscriptionsBySubscriberId } from '../api/client';
+import { getSubscriber, getSubscriptionsBySubscriberId, manageStripeSubscription } from '../api/client';
 import Card  from 'react-bootstrap/Card';
 import ListGroup  from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
@@ -43,6 +43,12 @@ export default function NewSubscriber() {
 
   let routeToNewSubscription = function() {
     navigate("/new-subscription");
+  };
+
+  let manageStripePaymentMethod = async function() {
+    let address = getServerAddress(); 
+    let response = await manageStripeSubscription(address, state.token.token, state.token.user_id);
+    console.log(response);
   };
 
 
@@ -86,7 +92,7 @@ export default function NewSubscriber() {
                         </Card>
                       </Card.Body>
                       <Row>
-                        <Col ><Button variant="primary" onClick={routeToNewSubscription}>Change Payment Method</Button></Col>
+                        <Col ><Button variant="primary" onClick={manageStripePaymentMethod}>Change Payment Method</Button></Col>
                       </Row>
                     </Card>
                   </Col>
