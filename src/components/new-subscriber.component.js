@@ -64,7 +64,7 @@ export default function NewSubscriber() {
         </Row>
         <p></p>
         <Card>
-          <Card.Header style={{textAlign:'left'}}>Subscriptions to the Gospel</Card.Header>
+          <Card.Header style={{textAlign:'left'}}>Subscriptions to the Gospel Message</Card.Header>
           <Card.Body>
             {
               subscriptions.map(function(subscription){
