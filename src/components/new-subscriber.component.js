@@ -48,7 +48,13 @@ export default function NewSubscriber() {
   let manageStripePaymentMethod = async function() {
     let address = getServerAddress(); 
     let response = await manageStripeSubscription(address, state.token.token, state.token.user_id);
-    console.log(response);
+
+    if(response.statusCode < 300) {
+      console.log(response);
+      window.location.href = response.object.location;
+    }
+
+
   };
 
 
