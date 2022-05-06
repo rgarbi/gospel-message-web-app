@@ -13,8 +13,6 @@ import Button from 'react-bootstrap/Button';
 
 export default function NewSubscriber() {
   const [name, setName] = useState('');
-  const [emailAddress, setEmailAddress] = useState('');
-  const [subscriberId, setSubscriberId] = useState('');
   const [subscriptions, setSubscriptions] = useState([]);
 
   const state = useSelector(state => state.authReducer);
@@ -29,8 +27,6 @@ export default function NewSubscriber() {
       if(response.statusCode < 300) {
         let subscriber = response.object;
         setName(subscriber.name);
-        setEmailAddress(subscriber.email_address);
-        setSubscriberId(subscriber.id);
         console.log(subscriber);
 
         let subscriptions_response = await getSubscriptionsBySubscriberId(address, subscriber.id, state.token.token);
@@ -89,6 +85,9 @@ export default function NewSubscriber() {
                           </ListGroup>
                         </Card>
                       </Card.Body>
+                      <Row>
+                        <Col ><Button variant="primary" onClick={routeToNewSubscription}>Change Payment Method</Button></Col>
+                      </Row>
                     </Card>
                   </Col>
                   <p></p>
