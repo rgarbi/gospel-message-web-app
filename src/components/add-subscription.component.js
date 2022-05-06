@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
 import { getSubscriber, initiateCheckout } from '../api/client';
@@ -12,7 +11,6 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 
 export default function NewSubscription() {
-  let navigate = useNavigate();
   const SUBMIT_BUTTON_TEXT = 'Submit';
 
   const [subscriberId, setSubscriberId] = useState('');
@@ -66,7 +64,7 @@ export default function NewSubscription() {
     }
 
     if(response.statusCode > 399) {
-      setErrorMessage('Incorrect Email Address or Password.');
+      setErrorMessage('Missing Required field.');
       setButtonText(SUBMIT_BUTTON_TEXT);
       setButtonDisabled(false);
       setLoadingSpinnerClass('visually-hidden');
@@ -83,12 +81,12 @@ export default function NewSubscription() {
         <Form onSubmit={handleSubmit} >
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="John Smith" onChange={evt => setName(evt.target.value)} value={name} />
+            <Form.Control type="text" placeholder="John Smith" onChange={evt => setName(evt.target.value)} value={name} required/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Mailing Address Line 1</Form.Label>
-            <Form.Control type="text" placeholder="123 Main" onChange={evt => setMailingAddressLine1(evt.target.value)} value={mailingAddressLine1} />
+            <Form.Control type="text" placeholder="123 Main" onChange={evt => setMailingAddressLine1(evt.target.value)} value={mailingAddressLine1} required/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicName">
@@ -98,31 +96,33 @@ export default function NewSubscription() {
 
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>City</Form.Label>
-            <Form.Control type="text" placeholder="City" onChange={evt => setCity(evt.target.value)} value={city} />
+            <Form.Control type="text" placeholder="City" onChange={evt => setCity(evt.target.value)} value={city} required/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>State</Form.Label>
-            <Form.Control type="text" placeholder="State" onChange={evt => setProvince(evt.target.value)} value={province} />
+            <Form.Control type="text" placeholder="State" onChange={evt => setProvince(evt.target.value)} value={province} required/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Postal Code</Form.Label>
-            <Form.Control type="text" placeholder="12345" onChange={evt => setPostalCode(evt.target.value)} value={postalCode} />
+            <Form.Control type="text" placeholder="12345" onChange={evt => setPostalCode(evt.target.value)} value={postalCode} required/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Email Address</Form.Label>
-            <Form.Control type="email" placeholder="Email Address" onChange={evt => setEmailAddress(evt.target.value)} value={emailAddress} />
+            <Form.Control type="email" placeholder="Email Address" onChange={evt => setEmailAddress(evt.target.value)} value={emailAddress} required/>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicName">
+          <Form.Group className="mb-3" controlId="formBasicName" required>
             <Form.Label>Subscription Type</Form.Label>
             <p></p>
             <Form.Check inline label="Digital" name="group1" type="radio" onChange={evt => setSubscriptionType('Digital')} />
             <Form.Check inline label="Paper" name="group1" type="radio" onChange={evt => setSubscriptionType('Paper')} />
           </Form.Group>
-          
+          <p></p>
+            <div>{errorMessage}</div>
+          <p></p>
           <Button variant="primary" type="submit" disabled={buttonDisabled}>
             {buttonText}
             <Spinner
