@@ -9,12 +9,16 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Spinner from 'react-bootstrap/Spinner';
 
 export default function NewSubscription() {
   let navigate = useNavigate();
-  const [subscriberId, setSubscriberId] = useState('');
+  const SUBMIT_BUTTON_TEXT = 'Submit';
 
+  const [subscriberId, setSubscriberId] = useState('');
+  const [buttonText, setButtonText] = useState(SUBMIT_BUTTON_TEXT);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [loadingSpinnerClass, setLoadingSpinnerClass] = useState('visually-hidden');
   const [name, setName] = useState('');
   const [mailingAddressLine1, setMailingAddressLine1] = useState('');
   const [mailingAddressLine2, setMailingAddressLine2] = useState('');
@@ -47,6 +51,10 @@ export default function NewSubscription() {
   }, [state.token.user_id, state.token.token]);
 
   const handleSubmit = async (event) => {
+    setButtonDisabled(true);
+    setButtonText('');
+    setLoadingSpinnerClass('');
+    
     event.preventDefault();
 
     let address = getServerAddress();
@@ -59,6 +67,9 @@ export default function NewSubscription() {
 
     if(response.statusCode > 399) {
       setErrorMessage('Incorrect Email Address or Password.');
+      setButtonText(SUBMIT_BUTTON_TEXT);
+      setButtonDisabled(false);
+      setLoadingSpinnerClass('visually-hidden');
     }
 
   };
@@ -112,8 +123,17 @@ export default function NewSubscription() {
             <Form.Check inline label="Paper" name="group1" type="radio" onChange={evt => setSubscriptionType('Paper')} />
           </Form.Group>
           
-          <Button variant="primary" type="submit">
-            Submit
+          <Button variant="primary" type="submit" disabled={buttonDisabled}>
+            {buttonText}
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className={loadingSpinnerClass}
+            />
+            <span className="visually-hidden">Submitting...</span>
           </Button>
           <p></p>
         </Form>
