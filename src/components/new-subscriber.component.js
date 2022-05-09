@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import getServerAddress from '../util/serverLocation';
-import { getSubscriber, getSubscriptionsBySubscriberId, manageStripeSubscription } from '../api/client';
+import { getSubscriber, getSubscriptionsBySubscriberId, manageStripeSubscription, cancelSubscription } from '../api/client';
 import Card  from 'react-bootstrap/Card';
 import ListGroup  from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
@@ -55,13 +55,12 @@ export default function NewSubscriber() {
     }
   };
 
-  let cancelSubscription = async function(subscriptionId) {
+  let cancelASubscription = async function(subscriptionId) {
     let address = getServerAddress(); 
     let response = await cancelSubscription(address, state.token.token, subscriptionId);
 
     if(response.statusCode < 300) {
       console.log(response);
-      window.location.href = response.object.location;
     }
   };
 
@@ -107,7 +106,7 @@ export default function NewSubscriber() {
                       </Card.Body>
                       <Row>
                         <Col ><Button variant="primary" onClick={manageStripePaymentMethod}>Change Payment Method</Button></Col>
-                        <Col ><Button variant="primary" onClick={cancelSubscription}>Change Payment Method</Button></Col>
+                        <Col ><Button variant="primary" onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></Col>
                       </Row>
                     </Card>
                   </Col>
