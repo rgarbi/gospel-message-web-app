@@ -53,8 +53,16 @@ export default function NewSubscriber() {
       console.log(response);
       window.location.href = response.object.location;
     }
+  };
 
+  let cancelSubscription = async function(subscriptionId) {
+    let address = getServerAddress(); 
+    let response = await cancelSubscription(address, state.token.token, subscriptionId);
 
+    if(response.statusCode < 300) {
+      console.log(response);
+      window.location.href = response.object.location;
+    }
   };
 
 
@@ -99,6 +107,7 @@ export default function NewSubscriber() {
                       </Card.Body>
                       <Row>
                         <Col ><Button variant="primary" onClick={manageStripePaymentMethod}>Change Payment Method</Button></Col>
+                        <Col ><Button variant="primary" onClick={cancelSubscription}>Change Payment Method</Button></Col>
                       </Row>
                     </Card>
                   </Col>

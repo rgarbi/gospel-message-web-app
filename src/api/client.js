@@ -185,6 +185,20 @@ async function manageStripeSubscription(serverAddress, token, userId) {
     });
 }
 
+async function cancelSubscription(serverAddress, token, subscriptionId) {
+    return fetch(serverAddress + '/subscriptions/' + subscriptionId, { 
+        method: 'DELETE',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response, true)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 async function checkToken(serverAddress, token, userId) {
     return fetch(serverAddress + '/check_token/'+ userId, { 
         method: 'POST',
@@ -224,4 +238,4 @@ async function generateResponse(response, redirectOn401) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken, cancelSubscription };
