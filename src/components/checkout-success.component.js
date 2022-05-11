@@ -13,7 +13,7 @@ import {checkoutSuccess} from '../api/client';
 
 export default function CheckoutSuccess() {
   const [sessionId, setSessionId] = useState('');
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const state = useSelector(state => state.authReducer);
   let navigate = useNavigate();
@@ -43,7 +43,7 @@ export default function CheckoutSuccess() {
     
     validateOTP();
     
-  }, []);
+  }, [navigate, searchParams, state.token.token, state.token.user_id]);
 
 
   return (
