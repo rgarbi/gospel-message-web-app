@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/Button';
 
 export default function NewSubscriber() {
   const [name, setName] = useState('');
+  const [value, setValue] = useState(0);
   const [subscriptions, setSubscriptions] = useState([]);
 
   const state = useSelector(state => state.authReducer);
@@ -39,7 +40,7 @@ export default function NewSubscriber() {
 
     fetchSubscriber();
     
-  }, [state.token.user_id, state.token.token]);
+  }, [state.token.user_id, state.token.token, value]);
 
   let routeToNewSubscription = function() {
     navigate("/new-subscription");
@@ -62,6 +63,8 @@ export default function NewSubscriber() {
     if(response.statusCode < 300) {
       console.log(response);
     }
+    setValue(value => value + 1);
+    console.log(value);
   };
 
 
@@ -83,35 +86,39 @@ export default function NewSubscriber() {
           <Card.Body>
             {
               subscriptions.map(function(subscription){
-                return <Row key={subscription.id}>
-                  <Col>
-                    <Card style={{textAlign:'left'}}>
-                      <Card.Body>
-                        <Card.Title>Subscription for: {subscription.subscription_name}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
-                        <Card>
-                          <ListGroup>
-                            <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
-                            <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
-                            <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
-                            <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>
-                            <ListGroup.Item>State: {subscription.subscription_state}</ListGroup.Item>
-                            <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
-                            <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
-                            <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
-                            <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
-                            <ListGroup.Item>Active: {subscription.active + ''}</ListGroup.Item>
-                          </ListGroup>
-                        </Card>
-                      </Card.Body>
-                      <Row>
-                        <Col ><Button variant="primary" onClick={manageStripePaymentMethod}>Change Payment Method</Button></Col>
-                        <Col ><Button variant="primary" onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></Col>
-                      </Row>
-                    </Card>
-                  </Col>
-                  <p></p>
-                </Row>
+                if(subscription.active) {
+                  return <Row key={subscription.id}>
+                    <Col>
+                      <Card style={{textAlign:'left'}}>
+                        <Card.Body>
+                          <Card.Title>Subscription for: {subscription.subscription_name}</Card.Title>
+                          <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
+                          <Card>
+                            <ListGroup>
+                              <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
+                              <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
+                              <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
+                              <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>
+                              <ListGroup.Item>State: {subscription.subscription_state}</ListGroup.Item>
+                              <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
+                              <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
+                              <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
+                              <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
+                              <ListGroup.Item>Active: {subscription.active + ''}</ListGroup.Item>
+                            </ListGroup>
+                          </Card>
+                        </Card.Body>
+                        <Row>
+                          <Col ><Button variant="primary" onClick={manageStripePaymentMethod}>Change Payment Method</Button></Col>
+                          <Col ><Button variant="primary" onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></Col>
+                        </Row>
+                      </Card>
+                    </Col>
+                    <p></p>
+                  </Row>
+                } else {
+                  return '';
+                }
               })
             }
             <Button variant="primary" onClick={routeToNewSubscription}>Add Subscription</Button>
