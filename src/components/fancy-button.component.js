@@ -3,16 +3,19 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
-export default function FancyButton() {
-  const [buttonText, setButtonText] = useState('');
+export default function FancyButton(props) {
+  const [buttonText, setButtonText] = useState(props.buttonText);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loadingSpinnerClass, setLoadingSpinnerClass] = useState('visually-hidden');
+  const [onClickFunction, setOnClickFunction] = useState(props.onClick);
 
   
   const buttonClick = async (event) => {
     setButtonDisabled(true);
     setButtonText('');
     setLoadingSpinnerClass('');
+
+    onClickFunction();
     
   };
 

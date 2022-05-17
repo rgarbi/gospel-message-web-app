@@ -10,6 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import FancyButton from './fancy-button.component';
 
 export default function NewSubscriber() {
   const [name, setName] = useState('');
@@ -109,8 +110,9 @@ export default function NewSubscriber() {
                           </Card>
                         </Card.Body>
                         <Row>
-                          <Col ><Button variant="primary" onClick={manageStripePaymentMethod}>Change Payment Method</Button></Col>
+                          <Col ><FancyButton variant="primary" buttonText="Change Payment Method" onClick={() => manageStripePaymentMethod}></FancyButton></Col>
                           <Col ><Button variant="primary" onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></Col>
+                          <Col ><FancyButton buttonText="TEST"></FancyButton></Col>
                         </Row>
                       </Card>
                     </Col>
