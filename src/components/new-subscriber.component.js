@@ -113,47 +113,54 @@ export default function NewSubscriber() {
                             <Card style={{textAlign:'left'}}>
                               <Col>
                                 <Row>
-                                <Card.Body>
-                                  <Card.Title>Subscription for: {subscription.subscription_name}</Card.Title>
-                                  <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
-                                  <Card>
-                                    <ListGroup>
-                                      <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
-                                      <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
-                                      <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
-                                      <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>
-                                      <ListGroup.Item>State: {subscription.subscription_state}</ListGroup.Item>
-                                      <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
-                                      <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
-                                      <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
-                                      <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
-                                      <ListGroup.Item>Active: {subscription.active + ''}</ListGroup.Item>
-                                    </ListGroup>
-                                  </Card>
-                                </Card.Body>
+                                  <Card.Header>
+                                    <Row>
+                                      <Col><Card.Title>Subscription for: {subscription.subscription_name}</Card.Title></Col>
+                                      <Col><Button variant="primary" style={{float:'right'}} onClick={() => {}}>Edit</Button></Col>
+                                    </Row>
+                                  </Card.Header>
+                                  <Card.Body>
+                                    <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
+                                    <Card>
+                                      <ListGroup>
+                                        <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
+                                        <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
+                                        <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
+                                        <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>
+                                        <ListGroup.Item>State: {subscription.subscription_state}</ListGroup.Item>
+                                        <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
+                                        <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
+                                        <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
+                                        <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
+                                        <ListGroup.Item>Active: {subscription.active + ''}</ListGroup.Item>
+                                      </ListGroup>
+                                    </Card>
+                                  </Card.Body>
                                 </Row>
                                 <Row>
                                   <Container>
-                                  <Row>
-                                  <Col className="col-sm">
-                                    <p>
-                                      <Button variant="primary" className='btn-block' onClick={manageStripePaymentMethod} disabled={buttonDisabled}>
-                                        {buttonText}
-                                        <Spinner
-                                          as="span"
-                                          animation="border"
-                                          size="sm"
-                                          role="status"
-                                          aria-hidden="true"
-                                          className={loadingSpinnerClass}
-                                        />
-                                        <span className="visually-hidden">Submitting...</span>
-                                      </Button>
-                                    </p>
-                                  </Col>
-                                  <Col ></Col>
-                                  <Col><p><Button variant="primary" onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></p></Col>
-                                  </Row>
+                                    <Row>
+                                      <Col className="col-sm">
+                                        <p>
+                                          <Button variant="primary" className='btn-block' onClick={manageStripePaymentMethod} disabled={buttonDisabled}>
+                                            {buttonText}
+                                            <Spinner
+                                              as="span"
+                                              animation="border"
+                                              size="sm"
+                                              role="status"
+                                              aria-hidden="true"
+                                              className={loadingSpinnerClass}
+                                            />
+                                            <span className="visually-hidden">Submitting...</span>
+                                          </Button>
+                                        </p>
+                                      </Col>
+                                      <Col ></Col>
+                                      <Col>
+                                        <p><Button variant="primary" style={{float:'right'}} onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></p>
+                                      </Col>
+                                    </Row>
                                   </Container>
                                 </Row>
                               </Col>
