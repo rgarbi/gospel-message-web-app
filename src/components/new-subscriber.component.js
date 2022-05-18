@@ -10,11 +10,18 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
 export default function NewSubscriber() {
+  const CHANGE_PAYMENT_METHOD_BUTTON_TEXT = 'Change Payment Method';
   const [name, setName] = useState('');
   const [value, setValue] = useState(0);
   const [subscriptions, setSubscriptions] = useState([]);
+
+  const [buttonText, setButtonText] = useState(CHANGE_PAYMENT_METHOD_BUTTON_TEXT);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [loadingSpinnerClass, setLoadingSpinnerClass] = useState('visually-hidden');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const state = useSelector(state => state.authReducer);
   let navigate = useNavigate();
@@ -47,12 +54,23 @@ export default function NewSubscriber() {
   };
 
   let manageStripePaymentMethod = async function() {
+    setButtonDisabled(true);
+    setButtonText(CHANGE_PAYMENT_METHOD_BUTTON_TEXT + '...  ');
+    setLoadingSpinnerClass('');
+
     let address = getServerAddress(); 
     let response = await manageStripeSubscription(address, state.token.token, state.token.user_id);
 
     if(response.statusCode < 300) {
       console.log(response);
       window.location.href = response.object.location;
+    }
+
+    if(response.statusCode > 399) {
+      setErrorMessage('Missing Required field.');
+      setButtonText(CHANGE_PAYMENT_METHOD_BUTTON_TEXT);
+      setButtonDisabled(false);
+      setLoadingSpinnerClass('visually-hidden');
     }
   };
 
@@ -89,30 +107,60 @@ export default function NewSubscriber() {
                 if(subscription.active) {
                   return <Row key={subscription.id}>
                     <Col>
-                      <Card style={{textAlign:'left'}}>
-                        <Card.Body>
-                          <Card.Title>Subscription for: {subscription.subscription_name}</Card.Title>
-                          <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
-                          <Card>
-                            <ListGroup>
-                              <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
-                              <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
-                              <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
-                              <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>
-                              <ListGroup.Item>State: {subscription.subscription_state}</ListGroup.Item>
-                              <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
-                              <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
-                              <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
-                              <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
-                              <ListGroup.Item>Active: {subscription.active + ''}</ListGroup.Item>
-                            </ListGroup>
-                          </Card>
-                        </Card.Body>
-                        <Row>
-                          <Col ><Button variant="primary" onClick={() => manageStripePaymentMethod}>Change Payment Method</Button></Col>
-                          <Col ><Button variant="primary" onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></Col>
-                        </Row>
-                      </Card>
+                      <Row>
+                        <Col>
+                          <Row>
+                            <Card style={{textAlign:'left'}}>
+                              <Col>
+                                <Row>
+                                <Card.Body>
+                                  <Card.Title>Subscription for: {subscription.subscription_name}</Card.Title>
+                                  <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
+                                  <Card>
+                                    <ListGroup>
+                                      <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
+                                      <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
+                                      <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
+                                      <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>
+                                      <ListGroup.Item>State: {subscription.subscription_state}</ListGroup.Item>
+                                      <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
+                                      <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
+                                      <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
+                                      <ListGroup.Item>Subscription Sign Up Date: {subscription.subscription_creation_date}</ListGroup.Item>
+                                      <ListGroup.Item>Active: {subscription.active + ''}</ListGroup.Item>
+                                    </ListGroup>
+                                  </Card>
+                                </Card.Body>
+                                </Row>
+                                <Row>
+                                  <Container>
+                                  <Row>
+                                  <Col className="col-sm">
+                                    <p>
+                                      <Button variant="primary" className='btn-block' onClick={manageStripePaymentMethod} disabled={buttonDisabled}>
+                                        {buttonText}
+                                        <Spinner
+                                          as="span"
+                                          animation="border"
+                                          size="sm"
+                                          role="status"
+                                          aria-hidden="true"
+                                          className={loadingSpinnerClass}
+                                        />
+                                        <span className="visually-hidden">Submitting...</span>
+                                      </Button>
+                                    </p>
+                                  </Col>
+                                  <Col ></Col>
+                                  <Col><p><Button variant="primary" onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></p></Col>
+                                  </Row>
+                                  </Container>
+                                </Row>
+                              </Col>
+                            </Card>
+                          </Row>
+                        </Col>
+                      </Row>
                     </Col>
                     <p></p>
                   </Row>
@@ -124,6 +172,9 @@ export default function NewSubscriber() {
             <Button variant="primary" onClick={routeToNewSubscription}>Add Subscription</Button>
           </Card.Body>
         </Card>
+        <p></p>
+          <div>{errorMessage}</div>
+        <p></p>
       </Container>
     );
   
