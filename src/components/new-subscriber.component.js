@@ -11,17 +11,26 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Modal from 'react-bootstrap/Modal';
 
 export default function NewSubscriber() {
   const CHANGE_PAYMENT_METHOD_BUTTON_TEXT = 'Change Payment Method';
   const [name, setName] = useState('');
   const [value, setValue] = useState(0);
   const [subscriptions, setSubscriptions] = useState([]);
-
   const [buttonText, setButtonText] = useState(CHANGE_PAYMENT_METHOD_BUTTON_TEXT);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loadingSpinnerClass, setLoadingSpinnerClass] = useState('visually-hidden');
   const [errorMessage, setErrorMessage] = useState('');
+  const [show, setShow] = useState(false);
+  const [cancelConfirmed, setCancelConfirmed] = useState(false);
+  const [idToCancel, setIdToCancel] = useState('');
+
+  const handleClose = () => {
+    setShow(false);
+    cancelASubscription();
+  };
+  const handleShow = () => setShow(true);
 
   const state = useSelector(state => state.authReducer);
   let navigate = useNavigate();
@@ -74,15 +83,17 @@ export default function NewSubscriber() {
     }
   };
 
-  let cancelASubscription = async function(subscriptionId) {
-    let address = getServerAddress(); 
-    let response = await cancelSubscription(address, state.token.token, subscriptionId);
+  let cancelASubscription = async function() {
+    if(cancelConfirmed) {
+      let address = getServerAddress(); 
+      let response = await cancelSubscription(address, state.token.token, idToCancel);
 
-    if(response.statusCode < 300) {
-      console.log(response);
+      if(response.statusCode < 300) {
+        console.log(response);
+      }
+      setValue(value => value + 1);
+      console.log(value);
     }
-    setValue(value => value + 1);
-    console.log(value);
   };
 
 
@@ -158,7 +169,18 @@ export default function NewSubscriber() {
                                       </Col>
                                       <Col ></Col>
                                       <Col>
-                                        <p><Button variant="warning" style={{float:'right'}} onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></p>
+                                        <p>
+                                          <Button 
+                                            variant="warning" 
+                                            style={{float:'right'}} 
+                                            onClick={async () => {
+                                              await setIdToCancel(subscription.id);
+                                              console.log('ID to cancel:', idToCancel);
+                                              handleShow();
+                                            }}
+                                          >
+                                            Cancel Subscription
+                                          </Button></p>
                                       </Col>
                                     </Row>
                                   </Container>
@@ -182,6 +204,28 @@ export default function NewSubscriber() {
         <p></p>
           <div>{errorMessage}</div>
         <p></p>
+        <div>
+          <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal.Header closeButton>
+              <Modal.Title>Modal heading</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+            <Modal.Footer>
+              <Button 
+                variant="secondary" 
+                onClick={() => {
+                    setCancelConfirmed(false);
+                    setIdToCancel('');
+                    handleClose();
+                }}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={() => {setCancelConfirmed(true); handleClose();}}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
       </Container>
     );
   
