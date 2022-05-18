@@ -116,7 +116,7 @@ export default function NewSubscriber() {
                                   <Card.Header>
                                     <Row>
                                       <Col><Card.Title>Subscription for: {subscription.subscription_name}</Card.Title></Col>
-                                      <Col><Button variant="primary" style={{float:'right'}} onClick={() => {}}>Edit</Button></Col>
+                                      <Col><Button variant="secondary" style={{float:'right'}} onClick={() => {}} disabled>Edit</Button></Col>
                                     </Row>
                                   </Card.Header>
                                   <Card.Body>
@@ -158,7 +158,7 @@ export default function NewSubscriber() {
                                       </Col>
                                       <Col ></Col>
                                       <Col>
-                                        <p><Button variant="primary" style={{float:'right'}} onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></p>
+                                        <p><Button variant="warning" style={{float:'right'}} onClick={() => cancelASubscription(subscription.id)}>Cancel Subscription</Button></p>
                                       </Col>
                                     </Row>
                                   </Container>

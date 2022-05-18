@@ -52,7 +52,6 @@ export default function NewSubscription() {
     setButtonDisabled(true);
     setButtonText('');
     setLoadingSpinnerClass('');
-    
     event.preventDefault();
 
     let address = getServerAddress();
@@ -73,73 +72,75 @@ export default function NewSubscription() {
   };
 
   return (
-    <Container className='gx-1'>
-      <p></p>
-      <Row>
-      <Card style={{textAlign:'left'}}>
-      <p></p>
-        <Form onSubmit={handleSubmit} >
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="John Smith" onChange={evt => setName(evt.target.value)} value={name} required/>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Mailing Address Line 1</Form.Label>
-            <Form.Control type="text" placeholder="123 Main" onChange={evt => setMailingAddressLine1(evt.target.value)} value={mailingAddressLine1} required/>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Mailing Address Line 2</Form.Label>
-            <Form.Control type="text" placeholder="Suite 200" onChange={evt => setMailingAddressLine2(evt.target.value)} value={mailingAddressLine2} />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>City</Form.Label>
-            <Form.Control type="text" placeholder="City" onChange={evt => setCity(evt.target.value)} value={city} required/>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>State</Form.Label>
-            <Form.Control type="text" placeholder="State" onChange={evt => setProvince(evt.target.value)} value={province} required/>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Postal Code</Form.Label>
-            <Form.Control type="text" placeholder="12345" onChange={evt => setPostalCode(evt.target.value)} value={postalCode} required/>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control type="email" placeholder="Email Address" onChange={evt => setEmailAddress(evt.target.value)} value={emailAddress} required/>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName" required>
-            <Form.Label>Subscription Type</Form.Label>
+    <div>
+      <Container className='gx-1'>
+        <p></p>
+        <Row>
+          <Card style={{textAlign:'left'}}>
             <p></p>
-            <Form.Check inline label="Digital" name="group1" type="radio" onChange={evt => setSubscriptionType('Digital')} />
-            <Form.Check inline label="Paper" name="group1" type="radio" onChange={evt => setSubscriptionType('Paper')} />
-          </Form.Group>
-          <p></p>
-            <div>{errorMessage}</div>
-          <p></p>
-          <Button variant="primary" type="submit" disabled={buttonDisabled}>
-            {buttonText}
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-              className={loadingSpinnerClass}
-            />
-            <span className="visually-hidden">Submitting...</span>
-          </Button>
-          <p></p>
-        </Form>
-      </Card>
-      </Row>
-    </Container>
+            <Form onSubmit={handleSubmit} >
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="text" placeholder="John Smith" onChange={evt => setName(evt.target.value)} value={name} required/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>Mailing Address Line 1</Form.Label>
+                <Form.Control type="text" placeholder="123 Main" onChange={evt => setMailingAddressLine1(evt.target.value)} value={mailingAddressLine1} required/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>Mailing Address Line 2</Form.Label>
+                <Form.Control type="text" placeholder="Suite 200" onChange={evt => setMailingAddressLine2(evt.target.value)} value={mailingAddressLine2} />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>City</Form.Label>
+                <Form.Control type="text" placeholder="City" onChange={evt => setCity(evt.target.value)} value={city} required/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>State</Form.Label>
+                <Form.Control type="text" placeholder="State" onChange={evt => setProvince(evt.target.value)} value={province} required/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>Postal Code</Form.Label>
+                <Form.Control type="text" placeholder="12345" onChange={evt => setPostalCode(evt.target.value)} value={postalCode} required/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control type="email" placeholder="Email Address" onChange={evt => setEmailAddress(evt.target.value)} value={emailAddress} required/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicName" required>
+                <Form.Label>Subscription Type</Form.Label>
+                <p></p>
+                <Form.Check inline label="Digital" name="group1" type="radio" onChange={evt => setSubscriptionType('Digital')} />
+                <Form.Check inline label="Paper" name="group1" type="radio" onChange={evt => setSubscriptionType('Paper')} />
+              </Form.Group>
+                <p></p>
+                <div>{errorMessage}</div>
+                <p></p>
+                <Button variant="primary" type="submit" disabled={buttonDisabled}>
+                {buttonText}
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className={loadingSpinnerClass}
+                />
+                <span className="visually-hidden">Submitting...</span>
+                </Button>
+                <p></p>
+            </Form>
+          </Card>
+        </Row>
+      </Container>
+    </div>
   );
   
 };
