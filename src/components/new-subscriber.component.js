@@ -19,19 +19,10 @@ export default function NewSubscriber() {
   const [value, setValue] = useState(0);
   const [subscriptions, setSubscriptions] = useState([]);
   const [buttonText, setButtonText] = useState(CHANGE_PAYMENT_METHOD_BUTTON_TEXT);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [changePaymentMewthodButtonDisabled, setChangePaymentMewthodButtonDisabled] = useState(false);
   const [loadingSpinnerClass, setLoadingSpinnerClass] = useState('visually-hidden');
   const [errorMessage, setErrorMessage] = useState('');
-  const [show, setShow] = useState(false);
-  const [cancelConfirmed, setCancelConfirmed] = useState(false);
-  const [idToCancel, setIdToCancel] = useState('');
-
-  const handleClose = () => {
-    setShow(false);
-    cancelASubscription();
-  };
-  const handleShow = () => setShow(true);
-
+  
   const state = useSelector(state => state.authReducer);
   let navigate = useNavigate();
   
@@ -63,7 +54,7 @@ export default function NewSubscriber() {
   };
 
   let manageStripePaymentMethod = async function() {
-    setButtonDisabled(true);
+    setChangePaymentMewthodButtonDisabled(true);
     setButtonText(CHANGE_PAYMENT_METHOD_BUTTON_TEXT + '...  ');
     setLoadingSpinnerClass('');
 
@@ -78,22 +69,22 @@ export default function NewSubscriber() {
     if(response.statusCode > 399) {
       setErrorMessage('Missing Required field.');
       setButtonText(CHANGE_PAYMENT_METHOD_BUTTON_TEXT);
-      setButtonDisabled(false);
+      setChangePaymentMewthodButtonDisabled(false);
       setLoadingSpinnerClass('visually-hidden');
     }
   };
 
-  let cancelASubscription = async function() {
-    if(cancelConfirmed) {
+  let cancelASubscription = async function(subscription_id) {
+    
       let address = getServerAddress(); 
-      let response = await cancelSubscription(address, state.token.token, idToCancel);
+      let response = await cancelSubscription(address, state.token.token, subscription_id);
 
       if(response.statusCode < 300) {
         console.log(response);
       }
       setValue(value => value + 1);
       console.log(value);
-    }
+    
   };
 
 
@@ -153,7 +144,7 @@ export default function NewSubscriber() {
                                     <Row>
                                       <Col className="col-sm">
                                         <p>
-                                          <Button variant="primary" className='btn-block' onClick={manageStripePaymentMethod} disabled={buttonDisabled}>
+                                          <Button variant="primary" className='btn-block' onClick={function() {manageStripePaymentMethod();}} disabled={changePaymentMewthodButtonDisabled}>
                                             {buttonText}
                                             <Spinner
                                               as="span"
@@ -173,10 +164,8 @@ export default function NewSubscriber() {
                                           <Button 
                                             variant="warning" 
                                             style={{float:'right'}} 
-                                            onClick={async () => {
-                                              await setIdToCancel(subscription.id);
-                                              console.log('ID to cancel:', idToCancel);
-                                              handleShow();
+                                            onClick={function () {
+                                              cancelASubscription(subscription.id);
                                             }}
                                           >
                                             Cancel Subscription
@@ -205,26 +194,7 @@ export default function NewSubscriber() {
           <div>{errorMessage}</div>
         <p></p>
         <div>
-          <Modal show={show} onHide={handleClose} animation={false}>
-            <Modal.Header closeButton>
-              <Modal.Title>Modal heading</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-            <Modal.Footer>
-              <Button 
-                variant="secondary" 
-                onClick={() => {
-                    setCancelConfirmed(false);
-                    setIdToCancel('');
-                    handleClose();
-                }}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={() => {setCancelConfirmed(true); handleClose();}}>
-                Save Changes
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          
         </div>
       </Container>
     );

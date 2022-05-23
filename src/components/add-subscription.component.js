@@ -123,7 +123,7 @@ export default function NewSubscription() {
                 <p></p>
                 <div>{errorMessage}</div>
                 <p></p>
-                <Button variant="primary" type="submit" disabled={buttonDisabled}>
+                <Button variant="primary" type="submit" disabled={buttonDisabled} onClick={()=>{}}>
                 {buttonText}
                 <Spinner
                   as="span"
