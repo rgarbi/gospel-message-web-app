@@ -13,6 +13,16 @@ import Form from 'react-bootstrap/Form'
 
 export default function DisplaySubscription(props) {
   const subscription = props.subscription;
+
+  const [name, setName] = useState(subscription.subscription_name);
+  const [mailingAddressLine1, setMailingAddressLine1] = useState(subscription.subscription_mailing_address_line_1);
+  const [mailingAddressLine2, setMailingAddressLine2] = useState(subscription.subscription_mailing_address_line_2);
+  const [city, setCity] = useState(subscription.subscription_city);
+  const [province, setProvince] = useState(subscription.subscription_state);
+  const [postalCode, setPostalCode] = useState(subscription.subscription_postal_code);
+  const [emailAddress, setEmailAddress] = useState(subscription.subscription_email_address);
+  const [subscriptionType, setSubscriptionType] = useState(subscription.subscription_type);
+
   return (
     <Row>
       <Card.Header>
@@ -25,8 +35,9 @@ export default function DisplaySubscription(props) {
         <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
         <Card>
           <ListGroup>
-            <ListGroup.Item className=''>Name: {subscription.subscription_name}
-            <Form.Control type="text" id="subscription_name" className='visually-hidden' defaultValue={subscription.subscription_name}/>
+            <ListGroup.Item className=''>
+              Name: {subscription.subscription_name}
+              <Form.Control type="text" id="subscription_name" className='visually-hidden' onChange={evt => setName(evt.target.value)} defaultValue={name}/>
             </ListGroup.Item>
             <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
             <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
