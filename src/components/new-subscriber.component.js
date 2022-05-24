@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form'
 
 export default function NewSubscriber() {
   const CHANGE_PAYMENT_METHOD_BUTTON_TEXT = 'Change Payment Method';
@@ -125,7 +126,9 @@ export default function NewSubscriber() {
                                     <Card.Subtitle className="mb-2 text-muted">Subscription Details</Card.Subtitle>
                                     <Card>
                                       <ListGroup>
-                                        <ListGroup.Item>Name: {subscription.subscription_name}</ListGroup.Item>
+                                        <ListGroup.Item>Name: {subscription.subscription_name}
+                                        <Form.Control type="text" id="subscription_name" className='visually-hidden' defaultValue={subscription.subscription_name}/>
+                                        </ListGroup.Item>
                                         <ListGroup.Item>Address Line 1: {subscription.subscription_mailing_address_line_1}</ListGroup.Item>
                                         <ListGroup.Item>Address Line 2: {subscription.subscription_mailing_address_line_2}</ListGroup.Item>
                                         <ListGroup.Item>City: {subscription.subscription_city}</ListGroup.Item>

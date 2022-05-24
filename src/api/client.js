@@ -126,6 +126,35 @@ async function addSubscription(serverAddress, token, subscriberId, name, mailing
     });
 }
 
+async function updateSubscription(serverAddress, token, subscriptionId, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, state, postalCode, emailAddress, subscriptionType, creationDate, active, stripeSubscriptionId) {
+    return fetch(serverAddress + '/subscriptions/' + subscriptionId , { 
+        method: 'POST',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+        body: JSON.stringify({
+            'id': subscriptionId,
+            'subscriber_id': subscriberId,
+            'subscription_name': name,
+            'subscription_mailing_address_line_1': mailingAddressLine1,
+            'subscription_mailing_address_line_2': mailingAddressLine2,
+            'subscription_city': city,
+            'subscription_state': state,
+            'subscription_postal_code': postalCode,
+            'subscription_email_address': emailAddress,
+            'subscription_creation_date': creationDate,
+            'active': active,
+            'subscription_type': subscriptionType,
+            'stripe_subscription_id': stripeSubscriptionId,
+        }),
+    })
+    .then(response => { return generateResponse(response, true)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 async function initiateCheckout(serverAddress, token, userId, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, state, postalCode, emailAddress, subscriptionType, priceLookupKey) {
     return fetch(serverAddress + '/checkout/' + userId, {
         method: 'POST',

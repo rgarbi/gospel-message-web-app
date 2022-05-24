@@ -53,8 +53,12 @@ export default function NewSubscription() {
     setButtonDisabled(true);
     setButtonText('');
     setLoadingSpinnerClass('');
-    
 
+    await postSubscription();
+
+  };
+
+  const postSubscription = async function() {
     let address = getServerAddress();
     let response = await initiateCheckout(address, state.token.token, state.token.user_id, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, province, postalCode, emailAddress, subscriptionType, 'gmdigitalsub-test');
 
@@ -69,7 +73,6 @@ export default function NewSubscription() {
       setButtonDisabled(false);
       setLoadingSpinnerClass('visually-hidden');
     }
-
   };
 
   return (
