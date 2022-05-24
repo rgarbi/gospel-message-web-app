@@ -49,10 +49,11 @@ export default function NewSubscription() {
   }, [state.token.user_id, state.token.token]);
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
     setButtonDisabled(true);
     setButtonText('');
     setLoadingSpinnerClass('');
-    event.preventDefault();
+    
 
     let address = getServerAddress();
     let response = await initiateCheckout(address, state.token.token, state.token.user_id, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, province, postalCode, emailAddress, subscriptionType, 'gmdigitalsub-test');
