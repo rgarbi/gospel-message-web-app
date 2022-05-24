@@ -36,10 +36,12 @@ export default function ResetPassword() {
         const response = await exchangeOtpForToken(address, otp);
 
         if(response.statusCode > 300) {
-          setErrorMessage('Something something try again.')
+          console.log('Something went wrong....', response);
+          setErrorMessage('Something went wrong.')
         }
 
         if(response.statusCode < 300) {
+          console.log('It worked?', response);
           let token = response.object;
           setTempToken(token.token);
           setUserId(token.user_id);
