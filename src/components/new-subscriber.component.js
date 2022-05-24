@@ -112,8 +112,7 @@ export default function NewSubscriber() {
                   return <Row key={subscription.id}>
                     <Col>
                       <Row>
-                        <Col>
-                          <Row>
+                        
                             <Card style={{textAlign:'left'}}>
                               <Col>
                                 <DisplaySubscription subscription={subscription}></DisplaySubscription>
@@ -154,8 +153,7 @@ export default function NewSubscriber() {
                                 </Row>
                               </Col>
                             </Card>
-                          </Row>
-                        </Col>
+                         
                       </Row>
                     </Col>
                     <p></p>
