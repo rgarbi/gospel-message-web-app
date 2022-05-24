@@ -128,7 +128,7 @@ async function addSubscription(serverAddress, token, subscriberId, name, mailing
 
 async function updateSubscription(serverAddress, token, subscriptionId, subscriberId, name, mailingAddressLine1, mailingAddressLine2, city, state, postalCode, emailAddress, subscriptionType, creationDate, active, stripeSubscriptionId) {
     return fetch(serverAddress + '/subscriptions/' + subscriptionId , { 
-        method: 'POST',
+        method: 'PUT',
         headers: new Headers([
             ['Content-Type', 'application/json'],
             ['Authorization', 'Bearer ' + token],
@@ -267,4 +267,4 @@ async function generateResponse(response, redirectOn401) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken, cancelSubscription };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken, cancelSubscription, updateSubscription };
