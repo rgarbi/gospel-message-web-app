@@ -112,48 +112,46 @@ export default function NewSubscriber() {
                   return <Row key={subscription.id}>
                     <Col>
                       <Row>
-                        
-                            <Card style={{textAlign:'left'}}>
-                              <Col>
-                                <DisplaySubscription subscription={subscription}></DisplaySubscription>
+                        <Card style={{textAlign:'left'}}>
+                          <Col>
+                            <DisplaySubscription subscription={subscription}></DisplaySubscription>
+                            <Row>
+                              <Container>
                                 <Row>
-                                  <Container>
-                                    <Row>
-                                      <Col className="col-sm">
-                                        <p>
-                                          <Button variant="primary" className='btn-block' onClick={function() {manageStripePaymentMethod();}} disabled={changePaymentMewthodButtonDisabled}>
-                                            {buttonText}
-                                            <Spinner
-                                              as="span"
-                                              animation="border"
-                                              size="sm"
-                                              role="status"
-                                              aria-hidden="true"
-                                              className={loadingSpinnerClass}
-                                            />
-                                            <span className="visually-hidden">Submitting...</span>
-                                          </Button>
-                                        </p>
-                                      </Col>
-                                      <Col ></Col>
-                                      <Col>
-                                        <p>
-                                          <Button 
-                                            variant="warning" 
-                                            style={{float:'right'}} 
-                                            onClick={function () {
-                                              cancelASubscription(subscription.id);
-                                            }}
-                                          >
-                                            Cancel Subscription
-                                          </Button></p>
-                                      </Col>
-                                    </Row>
-                                  </Container>
+                                  <Col className="col-sm">
+                                    <p>
+                                      <Button variant="primary" className='btn-block' onClick={function() {manageStripePaymentMethod();}} disabled={changePaymentMewthodButtonDisabled}>
+                                        {buttonText}
+                                        <Spinner
+                                          as="span"
+                                          animation="border"
+                                          size="sm"
+                                          role="status"
+                                          aria-hidden="true"
+                                          className={loadingSpinnerClass}
+                                        />
+                                        <span className="visually-hidden">Submitting...</span>
+                                      </Button>
+                                    </p>
+                                  </Col>
+                                  <Col ></Col>
+                                  <Col>
+                                    <p>
+                                      <Button 
+                                        variant="warning" 
+                                        style={{float:'right'}} 
+                                        onClick={function () {
+                                          cancelASubscription(subscription.id);
+                                        }}
+                                      >
+                                        Cancel Subscription
+                                      </Button></p>
+                                  </Col>
                                 </Row>
-                              </Col>
-                            </Card>
-                         
+                              </Container>
+                            </Row>
+                          </Col>
+                        </Card>
                       </Row>
                     </Col>
                     <p></p>
