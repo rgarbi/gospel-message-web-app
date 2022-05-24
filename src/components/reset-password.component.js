@@ -41,7 +41,7 @@ export default function ResetPassword() {
         }
 
         if(response.statusCode < 300) {
-          console.log('It worked?', response);
+          console.log('Exchanged code for one time token', response);
           let token = response.object;
           setTempToken(token.token);
           setUserId(token.user_id);
