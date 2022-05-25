@@ -5,14 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import getServerAddress from '../util/serverLocation';
 import { getSubscriber, getSubscriptionsBySubscriberId, manageStripeSubscription, cancelSubscription } from '../api/client';
 import Card  from 'react-bootstrap/Card';
-import ListGroup  from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form'
 import DisplaySubscription from './subscription-display.component'
 
 export default function NewSubscriber() {
