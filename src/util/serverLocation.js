@@ -3,6 +3,10 @@ function getServerAddress() {
     var currentLocation = window.location;
     let protocol = currentLocation.protocol;
     let hostname = currentLocation.hostname;
+    
+    if(hostname.includes('staging-subscribe.gospelmessage.net')) {
+        return 'https://staging-api.gospelmessage.net';
+    }
 
     if(hostname.includes('staging-newsletter-web-app.onrender.com')) {
         return 'https://staging-newsletter-signup-service.onrender.com';

@@ -11,7 +11,6 @@ import {checkoutSuccess} from '../api/client';
 
 
 export default function CheckoutSuccess() {
-  const [sessionId, setSessionId] = useState('');
   const [searchParams] = useSearchParams();
 
   const state = useSelector(state => state.authReducer);
@@ -28,8 +27,7 @@ export default function CheckoutSuccess() {
       if(!sessionIdFromParam) {
         navigate("/");
       } else {
-        console.log('GOT THE SESSION ID: ' + sessionIdFromParam, sessionId);
-        setSessionId(sessionIdFromParam);
+        console.log('GOT THE SESSION ID: ' + sessionIdFromParam);
         //Probably will need to post to the server to complete the transaction on our side.
         let response = await checkoutSuccess(address, state.token.token, state.token.user_id, sessionIdFromParam);
         if(response.statusCode < 300) {
