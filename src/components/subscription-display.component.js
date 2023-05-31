@@ -30,6 +30,7 @@ export default function DisplaySubscription(props) {
             <ListGroup.Item>Zip: {subscription.subscription_postal_code}</ListGroup.Item>
             <ListGroup.Item>Email Address: {subscription.subscription_email_address}</ListGroup.Item>
             <ListGroup.Item>Subscription Type: {subscription.subscription_type}</ListGroup.Item>
+            <ListGroup.Item>Renews On: {subscription.subscription_renewal_date}</ListGroup.Item>
           </ListGroup>
         </Card>
       </Card.Body>
