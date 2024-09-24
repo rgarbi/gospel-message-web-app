@@ -19,27 +19,27 @@ export type LoginFormState =
   | undefined
 
 
-  export const SignUpFormSchema = z.object({
-    name: z
+export const SignUpFormSchema = z.object({
+  name: z
+  .string()
+  .min(1, { message: 'Please enter a name' })
+  .trim(),
+  email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+  password: z
     .string()
-    .min(1, { message: 'Please enter a name' })
+    .min(1, { message: 'Please enter a password' })
     .trim(),
-    email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
-    password: z
-      .string()
-      .min(1, { message: 'Please enter a password' })
-      .trim(),
-  })
+})
    
-  export type SignUpFormState =
-    | {
-        errors?: {
-          name?: string[]
-          email?: string[]
-          password?: string[]
-          otherError: string
-        }
-        message?: string
+export type SignUpFormState =
+  | {
+      errors?: {
+        name?: string[]
+        email?: string[]
+        password?: string[]
+        otherError: string
       }
-    | undefined
+      message?: string
+    }
+  | undefined
   
