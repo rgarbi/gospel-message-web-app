@@ -37,9 +37,22 @@ export type SignUpFormState =
         name?: string[]
         email?: string[]
         password?: string[]
-        otherError: string
       }
       message?: string
     }
   | undefined
-  
+
+
+  export const ForgotPasswordFormSchema = z.object({
+    email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+  })
+     
+  export type ForgotPasswordFormState =
+    | {
+        errors?: {
+          email?: string[]
+        }
+        message?: string
+      }
+    | undefined
+    

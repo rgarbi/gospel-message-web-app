@@ -21,20 +21,21 @@ import {
   } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { login, signup } from "@/app/actions/auth"
+import { forgotpassword } from "@/app/actions/auth"
 
 export default function forgotPassword() {
-    const [login_state, login_action] = useFormState(login, undefined)
-    const [signup_state, signup_action] = useFormState(signup, undefined)
+    const [forgot_state, forgot_action] = useFormState(forgotpassword, undefined)
+
     
     return (
-<Card className="w-[350px]">
-                <CardHeader>
-                    <CardTitle>Forgot Password</CardTitle>
-                    <CardDescription>Enter the email address for your account.</CardDescription>
-                </CardHeader>
-                <CardFooter className="flex justify-between">
-                <form action={action}>
+        <Card className="w-[350px]">
+            <CardHeader>
+                <CardTitle>Forgot Password</CardTitle>
+                <CardDescription>Enter the email address for your account.</CardDescription>
+            </CardHeader>
+            <form action={forgot_action}>
+                <CardContent>
+                
                     <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-1.5">
                         <Label htmlFor="email">Email Address</Label>
@@ -42,13 +43,15 @@ export default function forgotPassword() {
                     </div>
                     </div>
                     <div>
-                        {login_state?.errors?.email && <p>{login_state.errors.email}</p>}
-                        {login_state?.message && <p>{login_state?.message}</p>}
+                        {forgot_state?.errors?.email && <p className="text-sm font-medium">{forgot_state.errors.email}</p>}
+                        {forgot_state?.message && <p className="text-sm font-medium">{forgot_state?.message}</p>}
                     </div>
-                    <SubmitButton>Submit</SubmitButton>
-                </form>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                    <SubmitButton text="Submit" />
                 </CardFooter>
-            </Card>
+            </form>
+        </Card>
     );
 }
 

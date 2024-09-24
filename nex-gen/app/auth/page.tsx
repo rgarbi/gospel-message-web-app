@@ -54,13 +54,14 @@ export default function Auth() {
                         </div>
                     
                     <div>
-                        {login_state?.errors?.email && <p>{login_state.errors.email}</p>}
-                        {login_state?.errors?.password && <p>{login_state.errors.password}</p>}
-                        {login_state?.message && <p>{login_state?.message}</p>}
+                        {login_state?.errors?.email && <p className="text-sm font-medium">{login_state.errors.email}</p>}
+                        {login_state?.errors?.password && <p className="text-sm font-medium">{login_state.errors.password}</p>}
+                        {login_state?.message && <p className="text-sm font-medium">{login_state?.message}</p>}
                     </div>
                     </CardContent>
                     <CardFooter className="flex justify-between">
                         <SubmitButton text="Log In" />
+                        <a className="text-sm font-medium" href="/forgot-password">Forgot password?</a>
                     </CardFooter>
                 </form>
             </Card>
@@ -89,10 +90,10 @@ export default function Auth() {
                     </div>
                 
                 <div>
-                    {signup_state?.errors?.email && <p>{signup_state.errors.email}</p>}
-                    {signup_state?.errors?.name && <p>{signup_state.errors.name}</p>}
-                    {signup_state?.errors?.password && <p>{signup_state.errors.password}</p>}
-                    {signup_state?.message && <p>{signup_state?.message}</p>}
+                    {signup_state?.errors?.email && <p className="text-sm font-medium">{signup_state.errors.email}</p>}
+                    {signup_state?.errors?.name && <p className="text-sm font-medium">{signup_state.errors.name}</p>}
+                    {signup_state?.errors?.password && <p className="text-sm font-medium">{signup_state.errors.password}</p>}
+                    {signup_state?.message && <p className="text-sm font-medium">{signup_state?.message}</p>}
                 </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">

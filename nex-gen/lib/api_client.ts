@@ -60,7 +60,7 @@ async function logIn(serverAddress: string, emailAddress: string, password: stri
     });
 }
 
-async function forgotPassword(serverAddress: string, emailAddress: string) {
+async function forgotPassword(serverAddress: string, emailAddress: string): Promise<ResponseObject> {
     return fetch(serverAddress + '/forgot_password', { 
         method: 'POST',
         headers: new Headers({'Content-Type':'application/json'}),
@@ -68,9 +68,10 @@ async function forgotPassword(serverAddress: string, emailAddress: string) {
             'email_address': emailAddress,
         }),
     })
-    .then(response => { return generateResponse(response, true)})
+    .then(async response => { return await generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
+        throw new Error('Error:', error)
     });
 }
 

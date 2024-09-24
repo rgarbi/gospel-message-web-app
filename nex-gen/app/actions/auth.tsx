@@ -1,7 +1,7 @@
 'use server'
 
-import { logIn, ResponseObject, signUp, AuthTokenResponse } from '@/lib/api_client';
-import { LoginFormSchema, LoginFormState, SignUpFormSchema, SignUpFormState } from '@/lib/definitions'
+import { logIn, ResponseObject, signUp, AuthTokenResponse, forgotPassword } from '@/lib/api_client';
+import { ForgotPasswordFormSchema, ForgotPasswordFormState, LoginFormSchema, LoginFormState, SignUpFormSchema, SignUpFormState } from '@/lib/definitions'
 import { createSession, deleteSession } from '@/lib/session';
 import { getApiServerLocation } from '@/lib/utils';
 import { redirect } from 'next/navigation';
@@ -96,50 +96,43 @@ export async function login(state: LoginFormState, formData: FormData) {
 }
 
 export async function forgotpassword(state: ForgotPasswordFormState, formData: FormData) {
-    console.log('RUNNING SIGNUP!');
-
-      // Validate form fields
-      const validatedFields = SignUpFormSchema.safeParse({
-        name: formData.get('name'),
+    const validatedFields = ForgotPasswordFormSchema.safeParse({
         email: formData.get('email'),
-        password: formData.get('password'),
     })
 
-    // If any form fields are invalid, return early
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
         }
     }
 
-    const { name, email, password } = validatedFields.data
+    const { email } = validatedFields.data
 
     // Call the rust service to log in.
-    let responseObject: ResponseObject = await signUp(getApiServerLocation(), email, password, name);
+    let responseObject: ResponseObject = await forgotPassword(getApiServerLocation(), email);
     
     if (responseObject.statusCode > 300) {
         console.log('Got a status code of: ' + responseObject.statusCode);
 
         if(responseObject.statusCode == 409) {
             return {
-                message: "Unable to create a user with that email address."
+                message: "Unable to send forgot password email."
             }              
         }
 
         if(responseObject.statusCode >= 500) {
             return {
-                message: "Unable to contact the server. Please try again."
+                message: "Something unexpected happened while attempting to send the forgot password request. Please try again."
             } 
         }
 
     }
 
-    let signUpResponse: AuthTokenResponse = Object.assign(new AuthTokenResponse(), responseObject.object); 
+    console.log(responseObject.object); 
 
-    //set the cookie.
-    await createSession(email, signUpResponse.user_id, signUpResponse.token, signUpResponse.expires_on)
-
-    redirect('/')
+    return {
+        message: "If a user with that email exists we have sent them instructions for resetting their password."
+    }
 }
 
 export async function logout() {
