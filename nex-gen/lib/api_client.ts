@@ -12,6 +12,62 @@ export class AuthTokenResponse {
     }
 }
 
+export class Subscriber {
+    public id: string;
+    public name: string;
+    public email_address: string;
+    public user_id: string;
+    public stripe_customer_id: string;
+
+    constructor() {
+        this.id = "";
+        this.name = "";
+        this.email_address = "";
+        this.user_id = "";
+        this.stripe_customer_id = "";
+    }
+}
+
+export class Subscription {
+    public id: string;
+    public subscriber_id: string;
+    public subscription_name: string;
+    public subscription_mailing_address_line_1: string;
+    public subscription_mailing_address_line_2: string;
+    public subscription_city: string;
+    public subscription_state: string;
+    public subscription_postal_code: string;
+    public subscription_email_address: string;
+    public subscription_creation_date: string;
+    public subscription_cancelled_on_date : string
+    public subscription_anniversary_day : number
+    public subscription_anniversary_month : number
+    public subscription_renewal_date : string
+    public active : boolean
+    public subscription_type: string
+    public stripe_subscription_id: string
+
+    constructor() {
+        this.id = "";
+        this.subscriber_id = "";
+        this.subscription_name = "";
+        this.subscription_mailing_address_line_1 = "";
+        this.subscription_mailing_address_line_2 = "";
+        this.subscription_city = "";
+        this.subscription_state = "";
+        this.subscription_postal_code = "";
+        this.subscription_email_address = "";
+        this.subscription_creation_date = "";
+        this.subscription_cancelled_on_date = "";
+        this.subscription_anniversary_day = 0;
+        this.subscription_anniversary_month = 0;
+        this.subscription_renewal_date = "";
+        this.active = false;
+        this.subscription_type = "";
+        this.stripe_subscription_id = "";
+    }
+}
+
 export class ResponseObject {
     public object: {};
     public statusCode: number;
@@ -75,18 +131,19 @@ async function forgotPassword(serverAddress: string, emailAddress: string): Prom
     });
 }
 
-async function exchangeOtpForToken(serverAddress: string, otp: string) {
+async function exchangeOtpForToken(serverAddress: string, otp: string): Promise<ResponseObject> {
     return fetch(serverAddress + '/forgot_password/otp/' + otp, { 
         method: 'GET',
         headers: new Headers({'Content-Type':'application/json'}),
     })
-    .then(response => { return generateResponse(response, true)})
+    .then(async response => { return await generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
+        throw new Error('Error:', error)
     });
 }
 
-async function forgotPasswordResetPassword(serverAddress: string, token: string, userId: string, password: string) {
+async function forgotPasswordResetPassword(serverAddress: string, token: string, userId: string, password: string): Promise<ResponseObject> {
     return fetch(serverAddress + '/forgot_password/reset_password', { 
         method: 'POST',
         headers: new Headers([
@@ -98,13 +155,14 @@ async function forgotPasswordResetPassword(serverAddress: string, token: string,
             'new_password': password,
         }),
     })
-    .then(response => { return generateResponse(response, true)})
+    .then(async response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
+        throw new Error('Error:', error)
     });
 }
 
-async function getSubscriber(serverAddress: string, userId: string, token: string) {
+async function getSubscriber(serverAddress: string, userId: string, token: string): Promise<ResponseObject> {
     return fetch(serverAddress + '/subscribers?user_id=' + userId, { 
         method: 'GET',
         headers: new Headers([
@@ -112,13 +170,14 @@ async function getSubscriber(serverAddress: string, userId: string, token: strin
             ['Authorization', 'Bearer ' + token],
         ]),
     })
-    .then(response => { return generateResponse(response, true)})
+    .then(async response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
+        throw new Error('Error:', error)
     });
 }
 
-async function getSubscriptionsBySubscriberId(serverAddress: string, subscriberId: string, token: string) {
+async function getSubscriptionsBySubscriberId(serverAddress: string, subscriberId: string, token: string): Promise<ResponseObject> {
     return fetch(serverAddress + '/subscribers/' + subscriberId + '/subscriptions', { 
         method: 'GET',
         headers: new Headers([
@@ -126,9 +185,10 @@ async function getSubscriptionsBySubscriberId(serverAddress: string, subscriberI
             ['Authorization', 'Bearer ' + token],
         ]),
     })
-    .then(response => { return generateResponse(response, true)})
+    .then(async response => { return generateResponse(response, true)})
     .catch(error => {
         console.error('Error:', error);
+        throw new Error('Error:', error)
     });
 }
 

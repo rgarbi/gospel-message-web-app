@@ -7,13 +7,13 @@ import { getApiServerLocation } from './lib/utils';
 export async function middleware(request: NextRequest) {
   let cookie = request.cookies.get('session')
   if(cookie) {
-    //TODO: Check the token!
     let jwtPayload = await decrypt(cookie.value)
     if (jwtPayload) {
       let responseObject: ResponseObject = await checkToken(getApiServerLocation(), jwtPayload.token as string, jwtPayload.userId as string)
 
       if (responseObject.statusCode > 300) {
         console.log("Token was invalid")
+        console.log(responseObject)
         return NextResponse.redirect(new URL('/auth', request.url))
       }
       
@@ -35,6 +35,6 @@ export const config = {
          * - _next/image (image optimization files)
          * - favicon.ico, sitemap.xml, robots.txt (metadata files)
          */
-        '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth|forgot-password).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth|forgot-password|reset-password).*)',
       ],
 }

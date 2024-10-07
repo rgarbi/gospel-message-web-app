@@ -1,8 +1,8 @@
 'use server'
 
-import { logIn, ResponseObject, signUp, AuthTokenResponse, forgotPassword } from '@/lib/api_client';
-import { ForgotPasswordFormSchema, ForgotPasswordFormState, LoginFormSchema, LoginFormState, SignUpFormSchema, SignUpFormState } from '@/lib/definitions'
-import { createSession, deleteSession } from '@/lib/session';
+import { logIn, ResponseObject, signUp, AuthTokenResponse, forgotPassword, forgotPasswordResetPassword } from '@/lib/api_client';
+import { ForgotPasswordFormSchema, ForgotPasswordFormState, LoginFormSchema, LoginFormState, ResetPasswordFormSchema, ResetPasswordFormState, SignUpFormSchema, SignUpFormState } from '@/lib/definitions'
+import { AuthSession, createSession, deleteSession, getAuthInfoFromSessionCookie } from '@/lib/session';
 import { getApiServerLocation } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 
@@ -128,11 +128,41 @@ export async function forgotpassword(state: ForgotPasswordFormState, formData: F
 
     }
 
-    console.log(responseObject.object); 
-
     return {
         message: "If a user with that email exists we have sent them instructions for resetting their password."
     }
+}
+
+export async function resetPasswordServerAction(state: ResetPasswordFormState, formData: FormData) {
+    const validatedFields = ResetPasswordFormSchema.safeParse({
+        password: formData.get('password'),
+        passwordConfirmed: formData.get('passwordConfirmed'),
+    })
+
+    if (!validatedFields.success) {
+        console.log(validatedFields.error.flatten().fieldErrors)
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+        }
+    }
+
+    const { password } = validatedFields.data
+
+    let session: AuthSession = await getAuthInfoFromSessionCookie();
+
+    let responseObject: ResponseObject = await forgotPasswordResetPassword(getApiServerLocation(), session.token, session.user_id, password);
+    
+    if (responseObject.statusCode > 300) {
+        console.log('Got a status code of: ' + responseObject.statusCode);
+
+        if(responseObject.statusCode >= 500) {
+            return {
+                message: "Something unexpected happened while setting the new password. Please try again."
+            } 
+        }
+    }
+
+    redirect('/')
 }
 
 export async function logout() {

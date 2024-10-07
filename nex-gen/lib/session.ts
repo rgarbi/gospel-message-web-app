@@ -3,9 +3,20 @@ import 'server-only'
 import { cookies } from 'next/headers'
 import { SignJWT, jwtVerify } from 'jose'
 
-
 const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
+
+export class AuthSession {
+  public user_id: string;
+  public token: string;
+  public emailAddress: string;
+
+  constructor() {
+      this.user_id = "";
+      this.token = "";
+      this.emailAddress = "";
+  }
+}
  
 export async function encrypt(payload: {}) {
   return new SignJWT(payload)
@@ -57,6 +68,18 @@ export async function updateSession() {
       sameSite: 'lax',
       path: '/',
     })
+  }
+
+  export async function getAuthInfoFromSessionCookie(): Promise<AuthSession> {
+    const session = cookies().get('session')?.value
+    let payload = await decrypt(session)
+
+    let authSession = new AuthSession();
+    authSession.emailAddress = payload?.emailAddress as string
+    authSession.token = payload?.token as string
+    authSession.user_id = payload?.userId as string
+
+    return authSession
   }
 
   export function deleteSession() {
