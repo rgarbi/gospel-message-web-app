@@ -1,6 +1,7 @@
 import * as React from "react"
  
 import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,11 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+  } from "@/components/ui/accordion"
 import { getSubscriber, getSubscriptionsBySubscriberId, Subscriber, Subscription } from "@/lib/api_client";
 import { getApiServerLocation } from "@/lib/utils";
 import { getAuthInfoFromSessionCookie } from "@/lib/session";
-
-
+import Link from "next/link"
 
 
 export default async function Home() {
@@ -34,22 +40,42 @@ export default async function Home() {
             <Card className="w-[750px]">
                 <CardHeader>
                     <CardTitle>Welcome {subscriber.name}</CardTitle>
-                    <CardDescription>Your email address is: {subscriber.email_address}</CardDescription>
+                    <CardDescription className="flex justify-between pt-3">
+                        You have {subscriptions.length} subscriptions.
+                        <div>
+                            <Button asChild>
+                                <Link href="/new-subscription">Add a Subscription</Link>
+                            </Button>
+                        </div>
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     {subscriptions.map((subscription) => {
-                        return <Card>
-                            <CardHeader>
-                                <CardTitle>{subscription.subscription_type} Subscription for: {subscription.subscription_email_address}</CardTitle>
-                                <CardDescription>Renews on: {subscription.subscription_renewal_date}</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                Sub content
-                            </CardContent>
-                            <CardFooter className="flex justify-between">
-                                Footer
-                            </CardFooter>
-                        </Card>
+                        return <Accordion type="single" collapsible key={subscription.id}>
+                                <AccordionItem value="item-1">
+                                <AccordionTrigger>{subscription.subscription_type} Subscription renewing on {subscription.subscription_renewal_date} for: {subscription.subscription_name}</AccordionTrigger>
+                                <AccordionContent>
+                                <Card key={subscription.id}>
+                                    <CardHeader>
+                                        <CardTitle>{subscription.subscription_type} Subscription Details</CardTitle>
+                                        <CardDescription>Name: {subscription.subscription_name}</CardDescription>
+                                        <CardDescription>Address Line 1: {subscription.subscription_mailing_address_line_1}</CardDescription>
+                                        <CardDescription>Address Line 2: {subscription.subscription_mailing_address_line_2}</CardDescription>
+                                        <CardDescription>City: {subscription.subscription_city}</CardDescription>
+                                        <CardDescription>State: {subscription.subscription_state}</CardDescription>
+                                        <CardDescription>Zip: {subscription.subscription_postal_code}</CardDescription>
+                                        <CardDescription>Email Address: {subscription.subscription_email_address}</CardDescription>
+                                        <CardDescription>Subscription Type: {subscription.subscription_type}</CardDescription>
+                                        <CardDescription>Renews On: {subscription.subscription_renewal_date}</CardDescription>
+                                    </CardHeader>
+                                    <CardFooter className="flex justify-between">
+                                        <Button variant="outline">Change Payment Method</Button>
+                                        <Button variant="destructive">Cancel Subscription</Button>
+                                    </CardFooter>
+                                </Card>
+                                </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         })
                     }
                 </CardContent>
