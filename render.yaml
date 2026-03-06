@@ -6,8 +6,8 @@ services:
     env: static
     repo: https://github.com/rgarbi/gospel-message-web-app
     branch: main
-    buildCommand: yarn build
-    staticPublishPath: ./build
+    buildCommand: npm run build
+    staticPublishPath: ./dist
     headers:
       - path: /*
         name: X-Frame-Options
@@ -25,8 +25,8 @@ services:
     env: static
     repo: https://github.com/rgarbi/gospel-message-web-app
     branch: staging
-    buildCommand: yarn build
-    staticPublishPath: ./build
+    buildCommand: npm run build
+    staticPublishPath: ./dist
     headers:
       - path: /*
         name: X-Frame-Options
