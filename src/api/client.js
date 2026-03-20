@@ -242,6 +242,82 @@ async function checkToken(serverAddress, token, userId) {
     });
 }
 
+async function getAdminSubscribers(serverAddress, userId, token) {
+    return fetch(serverAddress + '/admin/subscribers/' + userId, {
+        method: 'GET',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response, false)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+async function getAdminSubscriptions(serverAddress, userId, token) {
+    return fetch(serverAddress + '/admin/subscriptions/' + userId, {
+        method: 'GET',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response, false)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+async function getAdminUsers(serverAddress, userId, token) {
+    return fetch(serverAddress + '/admin/users/' + userId, {
+        method: 'GET',
+        headers: new Headers([
+            ['Content-Type', 'application/json'],
+            ['Authorization', 'Bearer ' + token],
+        ]),
+    })
+    .then(response => { return generateResponse(response, false)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+async function adminPromoteUser(serverAddress, adminUserId, targetUserId, token) {
+    return fetch(
+        serverAddress + '/admin/users/' + adminUserId + '/promote/' + targetUserId,
+        {
+            method: 'POST',
+            headers: new Headers([
+                ['Content-Type', 'application/json'],
+                ['Authorization', 'Bearer ' + token],
+            ]),
+        }
+    )
+    .then(response => { return generateResponse(response, false)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+async function adminDemoteUser(serverAddress, adminUserId, targetUserId, token) {
+    return fetch(
+        serverAddress + '/admin/users/' + adminUserId + '/demote/' + targetUserId,
+        {
+            method: 'POST',
+            headers: new Headers([
+                ['Content-Type', 'application/json'],
+                ['Authorization', 'Bearer ' + token],
+            ]),
+        }
+    )
+    .then(response => { return generateResponse(response, false)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
 async function generateResponse(response, redirectOn401) {
     let responseObject = {
@@ -267,4 +343,4 @@ async function generateResponse(response, redirectOn401) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken, cancelSubscription, updateSubscription };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken, cancelSubscription, updateSubscription, getAdminSubscribers, getAdminSubscriptions, getAdminUsers, adminPromoteUser, adminDemoteUser };

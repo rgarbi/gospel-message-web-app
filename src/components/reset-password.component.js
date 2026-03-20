@@ -6,12 +6,6 @@ import getServerAddress from '../util/serverLocation';
 import { exchangeOtpForToken, forgotPasswordResetPassword } from '../api/client';
 import { clearToken } from '../store/auth/token';
 
-import Container  from 'react-bootstrap/Container';
-import Card  from 'react-bootstrap/Card';
-import Col  from 'react-bootstrap/Col';
-import Row  from 'react-bootstrap/Row';
-
-
 export default function ResetPassword() {
   const [password, setPassword] = useState('');
   const [userId, setUserId] = useState('');
@@ -20,88 +14,73 @@ export default function ResetPassword() {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
-  let navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   React.useEffect(() => {
-    console.log('Use effect ran');
     const validateOTP = async () => {
-      let address = getServerAddress();
-      let otp = searchParams.get("otp");
+      const address = getServerAddress();
+      const otp = searchParams.get('otp');
 
-      if(!otp) {
-        navigate("/");
+      if (!otp) {
+        navigate('/');
       } else {
-
         const response = await exchangeOtpForToken(address, otp);
 
-        if(response.statusCode > 300) {
-          console.log('Something went wrong....', response);
-          setErrorMessage('Something went wrong.')
+        if (response.statusCode > 300) {
+          setErrorMessage('Something went wrong.');
         }
 
-        if(response.statusCode < 300) {
-          console.log('Exchanged code for one time token', response);
-          let token = response.object;
+        if (response.statusCode < 300) {
+          const token = response.object;
           setTempToken(token.token);
           setUserId(token.user_id);
         }
       }
     };
-
     validateOTP();
-    
   }, [navigate, searchParams]);
-
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const address = getServerAddress();
+    const response = await forgotPasswordResetPassword(address, tempToken, userId, password);
 
-    let address = getServerAddress();
-    let response = await forgotPasswordResetPassword(address, tempToken, userId, password);
-
-    if(response.statusCode < 300) {
+    if (response.statusCode < 300) {
       dispatch(clearToken());
-      //route to home
-      navigate("/");
+      navigate('/');
     }
 
-    if(response.statusCode > 399) {
+    if (response.statusCode > 399) {
       setErrorMessage('Something happened!');
     }
-
   };
 
-
   return (
-          <Container className="p-5 ">
-          <Row>
-              <Col >
-                  <Card className="p-5 border border-light rounded-3 text-start">
-                    <form  onSubmit={handleSubmit}>
-                      <div className='form-group'>
-                        <label>Password</label>
-                        <input
-                          type='password'
-                          className='form-control'
-                          placeholder='Enter password'
-                          onChange={evt => setPassword(evt.target.value)}
-                          value={password}
-                          id='password'
-                        />
-                      </div>
-                      <p></p>
-                      <div>{errorMessage}</div>
-                      <p></p>
-                      <button type='submit' className='btn btn-primary btn-block'>
-                        Submit
-                      </button>
-                    </form>
-                  </Card>
-              </Col>
-          </Row>
-      </Container>
-    );
-  
+    <div className="max-w-7xl mx-auto p-8 w-full">
+      <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="reset-password" className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              id="reset-password"
+              type="password"
+              className="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              placeholder="Enter password"
+              onChange={evt => setPassword(evt.target.value)}
+              value={password}
+            />
+          </div>
+          {errorMessage && <div className="text-red-600 text-sm">{errorMessage}</div>}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }

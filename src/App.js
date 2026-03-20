@@ -1,5 +1,4 @@
 import React from 'react';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import NewSubscriber from './components/new-subscriber.component'
 import Header from './components/header.component';
@@ -11,6 +10,7 @@ import ForgotPassword from './components/forgot-password.component';
 import ResetPassword from './components/reset-password.component';
 import NewSubscription from './components/add-subscription.component';
 import CheckoutSuccess from './components/checkout-success.component';
+import Admin from './components/admin.component';
 
 const ROOT_PATH = '/';
 const FORGOT_PASSWORD = '/forgot-password'
@@ -18,6 +18,7 @@ const RESET_PASSWORD = '/reset-password'
 const SUBSCRIBER_PATH = '/subscriber';
 const NEW_SUBSCRIPTION = '/new-subscription';
 const CHECKOUT_SUCCESS = '/checkout-success';
+const ADMIN_PATH = '/admin';
 
 
 export default function App() {
@@ -33,8 +34,9 @@ export default function App() {
 
 
   return ( 
-      <div className='App'>
+      <div className="App flex flex-col min-h-screen">
         <Header />
+        <main className="flex-1 flex flex-col">
         <Routes>
           <Route exact path={ROOT_PATH} element={<Auth />}></Route>
           <Route path={SUBSCRIBER_PATH} element={<NewSubscriber />}></Route>
@@ -42,8 +44,9 @@ export default function App() {
           <Route path={RESET_PASSWORD} element={<ResetPassword />}></Route>
           <Route path={NEW_SUBSCRIPTION} element={<NewSubscription />}></Route>
           <Route path={CHECKOUT_SUCCESS} element={<CheckoutSuccess />}></Route>
+          <Route path={ADMIN_PATH} element={<Admin />} />
         </Routes>
-          
+        </main>
       </div>
   );
 };
