@@ -9,6 +9,9 @@ function canRoute(path, token) {
         return true;
     }
 
+    if (path === '/admin') {
+        return isAGoodToken(token) && isAdminToken(token);
+    }
 
     let goodToken = isAGoodToken(token);
     console.log('Good token? -> ', goodToken);
@@ -61,4 +64,18 @@ function tokenIsExpired(token) {
     return false;
 }
 
-export {canRoute, isTokenEmpty, tokenIsExpired, validateCheckTokenResponseIs401 };
+/** True when the login response marks this session as admin (snake_case matches API). */
+function isAdminToken(token) {
+    if (!token || typeof token !== 'object') {
+        return false;
+    }
+    if (token.is_admin === true) {
+        return true;
+    }
+    if (typeof token.group === 'string' && token.group.toLowerCase() === 'admin') {
+        return true;
+    }
+    return false;
+}
+
+export { canRoute, isTokenEmpty, tokenIsExpired, validateCheckTokenResponseIs401, isAdminToken };
