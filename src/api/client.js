@@ -318,6 +318,23 @@ async function adminDemoteUser(serverAddress, adminUserId, targetUserId, token) 
     });
 }
 
+async function adminCancelSubscription(serverAddress, adminUserId, subscriptionId, token) {
+    return fetch(
+        serverAddress + '/admin/subscriptions/' + adminUserId + '/' + subscriptionId,
+        {
+            method: 'DELETE',
+            headers: new Headers([
+                ['Content-Type', 'application/json'],
+                ['Authorization', 'Bearer ' + token],
+            ]),
+        }
+    )
+    .then(response => { return generateResponse(response, false)})
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
 async function generateResponse(response, redirectOn401) {
     let responseObject = {
@@ -343,4 +360,4 @@ async function generateResponse(response, redirectOn401) {
 
 
 
-export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken, cancelSubscription, updateSubscription, getAdminSubscribers, getAdminSubscriptions, getAdminUsers, adminPromoteUser, adminDemoteUser };
+export { signUp, logIn, getSubscriber, forgotPassword, exchangeOtpForToken, forgotPasswordResetPassword, getSubscriptionsBySubscriberId, addSubscription, initiateCheckout, checkoutSuccess, manageStripeSubscription, checkToken, cancelSubscription, updateSubscription, getAdminSubscribers, getAdminSubscriptions, getAdminUsers, adminPromoteUser, adminDemoteUser, adminCancelSubscription };

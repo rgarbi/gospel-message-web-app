@@ -7,6 +7,7 @@ import {
   getAdminUsers,
   adminPromoteUser,
   adminDemoteUser,
+  adminCancelSubscription,
 } from '../api/client';
 
 const TABS = [
@@ -126,6 +127,7 @@ export default function Admin() {
   const [error, setError] = useState('');
   const [actionError, setActionError] = useState('');
   const [pendingUserId, setPendingUserId] = useState(null);
+  const [pendingSubscriptionId, setPendingSubscriptionId] = useState(null);
 
   const [sortSubscriptions, setSortSubscriptions] = useState({
     key: 'subscription_name',
@@ -264,6 +266,34 @@ export default function Admin() {
     }
   };
 
+  const handleCancelSubscription = async (row) => {
+    const name = row.subscription_name ?? 'this subscriber';
+    const email = row.subscription_email_address ?? '';
+    const detail = email ? `${name} (${email})` : name;
+    if (
+      !window.confirm(
+        `Cancel subscription for ${detail}? This stops billing in Stripe.`
+      )
+    ) {
+      return;
+    }
+
+    setActionError('');
+    setPendingSubscriptionId(row.id);
+    const res = await adminCancelSubscription(
+      getServerAddress(),
+      userId,
+      row.id,
+      token
+    );
+    setPendingSubscriptionId(null);
+    if (res.statusCode === 200) {
+      await loadData();
+    } else {
+      setActionError('Cancel failed.');
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col px-4 py-6 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -399,17 +429,22 @@ export default function Admin() {
                       onSort={k => toggleSortKey(setSortSubscriptions, k)}
                       className="whitespace-nowrap"
                     />
+                    <th className="px-4 py-3 w-24 font-medium text-gray-700" scope="col">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {subscriptions.length === 0 ? (
                     <tr>
-                      <td colSpan={12} className="px-4 py-8 text-center text-gray-500">
+                      <td colSpan={13} className="px-4 py-8 text-center text-gray-500">
                         No subscriptions.
                       </td>
                     </tr>
                   ) : (
-                    sortedSubscriptions.map(row => (
+                    sortedSubscriptions.map(row => {
+                      const busy = pendingSubscriptionId === row.id;
+                      return (
                       <tr key={row.id} className="hover:bg-gray-50/80">
                         <td className="px-4 py-3 text-gray-900 whitespace-nowrap">{row.subscription_name}</td>
                         <td className="px-4 py-3 text-gray-700">{row.subscription_email_address}</td>
@@ -443,8 +478,21 @@ export default function Admin() {
                         <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
                           {row.subscription_renewal_date ?? '—'}
                         </td>
+                        <td className="px-4 py-3">
+                          {row.active ? (
+                            <button
+                              type="button"
+                              disabled={busy}
+                              onClick={() => handleCancelSubscription(row)}
+                              className="text-xs font-medium text-amber-700 hover:text-amber-900 disabled:opacity-50"
+                            >
+                              {busy ? '…' : 'Cancel'}
+                            </button>
+                          ) : null}
+                        </td>
                       </tr>
-                    ))
+                    );
+                    })
                   )}
                 </tbody>
               </table>
