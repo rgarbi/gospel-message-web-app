@@ -1,4 +1,4 @@
-import { defineConfig, transformWithEsbuild } from 'vite'
+import { defineConfig, transformWithOxc } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -10,17 +10,17 @@ export default defineConfig({
       enforce: 'pre',
       async transform(code, id) {
         if (!id.match(/src\/.*\.js$/)) return null
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-          jsx: 'automatic',
+        return transformWithOxc(code, id, {
+          lang: 'jsx',
+          jsx: { runtime: 'automatic' },
         })
       },
     },
     react(),
   ],
   optimizeDeps: {
-    esbuildOptions: {
-      loader: {
+    rolldownOptions: {
+      moduleTypes: {
         '.js': 'jsx',
       },
     },
