@@ -98,7 +98,7 @@ function toggleSortKey(setSort, key) {
 function SortTh({ label, sortKey, sort, onSort, className = '' }) {
   const active = sort.key === sortKey;
   return (
-    <th className={`px-4 py-3 ${className}`} scope="col">
+    <th className={`px-3 py-2 ${className}`} scope="col">
       <button
         type="button"
         className="inline-flex items-center gap-1 max-w-full text-left font-medium text-gray-700 hover:text-blue-600"
@@ -295,7 +295,7 @@ export default function Admin() {
   };
 
   return (
-    <div className="flex-1 flex flex-col px-4 py-6 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    <div className="flex-1 flex flex-col px-4 py-6 sm:px-6 lg:px-8 w-full max-w-none">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Admin</h1>
@@ -348,8 +348,8 @@ export default function Admin() {
       ) : (
         <>
           {tab === 'subscriptions' && (
-            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-              <table className="min-w-full text-sm text-left">
+            <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+              <table className="w-full table-fixed text-sm text-left">
                 <thead className="bg-gray-50 text-gray-700 border-b border-gray-200">
                   <tr>
                     <SortTh
@@ -376,19 +376,20 @@ export default function Admin() {
                       sort={sortSubscriptions}
                       onSort={k => toggleSortKey(setSortSubscriptions, k)}
                     />
+                    <th className="px-3 py-2 w-20 font-medium text-gray-700" scope="col">
+                      Actions
+                    </th>
                     <SortTh
                       label="Address line 1"
                       sortKey="subscription_mailing_address_line_1"
                       sort={sortSubscriptions}
                       onSort={k => toggleSortKey(setSortSubscriptions, k)}
-                      className="min-w-[8rem]"
                     />
                     <SortTh
                       label="Address line 2"
                       sortKey="subscription_mailing_address_line_2"
                       sort={sortSubscriptions}
                       onSort={k => toggleSortKey(setSortSubscriptions, k)}
-                      className="min-w-[6rem]"
                     />
                     <SortTh
                       label="City"
@@ -429,15 +430,12 @@ export default function Admin() {
                       onSort={k => toggleSortKey(setSortSubscriptions, k)}
                       className="whitespace-nowrap"
                     />
-                    <th className="px-4 py-3 w-24 font-medium text-gray-700" scope="col">
-                      Actions
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {subscriptions.length === 0 ? (
                     <tr>
-                      <td colSpan={13} className="px-4 py-8 text-center text-gray-500">
+                      <td colSpan={13} className="px-3 py-8 text-center text-gray-500">
                         No subscriptions.
                       </td>
                     </tr>
@@ -446,10 +444,10 @@ export default function Admin() {
                       const busy = pendingSubscriptionId === row.id;
                       return (
                       <tr key={row.id} className="hover:bg-gray-50/80">
-                        <td className="px-4 py-3 text-gray-900 whitespace-nowrap">{row.subscription_name}</td>
-                        <td className="px-4 py-3 text-gray-700">{row.subscription_email_address}</td>
-                        <td className="px-4 py-3 text-gray-700">{formatSubscriptionType(row.subscription_type)}</td>
-                        <td className="px-4 py-3">
+                        <td className="px-3 py-2 text-gray-900 break-words">{row.subscription_name}</td>
+                        <td className="px-3 py-2 text-gray-700 break-words">{row.subscription_email_address}</td>
+                        <td className="px-3 py-2 text-gray-700">{formatSubscriptionType(row.subscription_type)}</td>
+                        <td className="px-3 py-2">
                           <span
                             className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${
                               row.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
@@ -458,27 +456,7 @@ export default function Admin() {
                             {row.active ? 'Yes' : 'No'}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-600 max-w-[12rem]">{row.subscription_mailing_address_line_1}</td>
-                        <td className="px-4 py-3 text-gray-600 max-w-[10rem]">
-                          {row.subscription_mailing_address_line_2?.trim()
-                            ? row.subscription_mailing_address_line_2
-                            : '—'}
-                        </td>
-                        <td className="px-4 py-3 text-gray-600">{row.subscription_city}</td>
-                        <td className="px-4 py-3 text-gray-600">{row.subscription_state}</td>
-                        <td className="px-4 py-3 text-gray-600">{row.subscription_postal_code}</td>
-                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap text-xs">
-                          {formatIsoDate(row.subscription_creation_date)}
-                        </td>
-                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap text-xs">
-                          {row.subscription_cancelled_on_date != null
-                            ? formatIsoDate(row.subscription_cancelled_on_date)
-                            : '—'}
-                        </td>
-                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
-                          {row.subscription_renewal_date ?? '—'}
-                        </td>
-                        <td className="px-4 py-3">
+                        <td className="px-3 py-2">
                           {row.active ? (
                             <button
                               type="button"
@@ -490,6 +468,26 @@ export default function Admin() {
                             </button>
                           ) : null}
                         </td>
+                        <td className="px-3 py-2 text-gray-600 break-words">{row.subscription_mailing_address_line_1}</td>
+                        <td className="px-3 py-2 text-gray-600 break-words">
+                          {row.subscription_mailing_address_line_2?.trim()
+                            ? row.subscription_mailing_address_line_2
+                            : '—'}
+                        </td>
+                        <td className="px-3 py-2 text-gray-600 break-words">{row.subscription_city}</td>
+                        <td className="px-3 py-2 text-gray-600">{row.subscription_state}</td>
+                        <td className="px-3 py-2 text-gray-600">{row.subscription_postal_code}</td>
+                        <td className="px-3 py-2 text-gray-600 whitespace-nowrap text-xs">
+                          {formatIsoDate(row.subscription_creation_date)}
+                        </td>
+                        <td className="px-3 py-2 text-gray-600 whitespace-nowrap text-xs">
+                          {row.subscription_cancelled_on_date != null
+                            ? formatIsoDate(row.subscription_cancelled_on_date)
+                            : '—'}
+                        </td>
+                        <td className="px-3 py-2 text-gray-600 whitespace-nowrap">
+                          {row.subscription_renewal_date ?? '—'}
+                        </td>
                       </tr>
                     );
                     })
@@ -500,8 +498,8 @@ export default function Admin() {
           )}
 
           {tab === 'subscribers' && (
-            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-              <table className="min-w-full text-sm text-left">
+            <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+              <table className="w-full table-fixed text-sm text-left">
                 <thead className="bg-gray-50 text-gray-700 border-b border-gray-200">
                   <tr>
                     <SortTh
@@ -540,10 +538,10 @@ export default function Admin() {
                   ) : (
                     sortedSubscribers.map(row => (
                       <tr key={row.id} className="hover:bg-gray-50/80">
-                        <td className="px-4 py-3 text-gray-900">{row.name}</td>
-                        <td className="px-4 py-3 text-gray-700">{row.email_address}</td>
-                        <td className="px-4 py-3 text-gray-600 font-mono text-xs">{row.user_id}</td>
-                        <td className="px-4 py-3 text-gray-600 font-mono text-xs">
+                        <td className="px-3 py-2 text-gray-900 break-words">{row.name}</td>
+                        <td className="px-3 py-2 text-gray-700 break-words">{row.email_address}</td>
+                        <td className="px-3 py-2 text-gray-600 font-mono text-xs break-all">{row.user_id}</td>
+                        <td className="px-3 py-2 text-gray-600 font-mono text-xs break-all">
                           {row.stripe_customer_id ?? '—'}
                         </td>
                       </tr>
@@ -555,8 +553,8 @@ export default function Admin() {
           )}
 
           {tab === 'users' && (
-            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-              <table className="min-w-full text-sm text-left">
+            <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+              <table className="w-full table-fixed text-sm text-left">
                 <thead className="bg-gray-50 text-gray-700 border-b border-gray-200">
                   <tr>
                     <SortTh
@@ -577,7 +575,7 @@ export default function Admin() {
                       sort={sortUsers}
                       onSort={k => toggleSortKey(setSortUsers, k)}
                     />
-                    <th className="px-4 py-3 w-48 font-medium text-gray-700" scope="col">
+                    <th className="px-3 py-2 w-48 font-medium text-gray-700" scope="col">
                       Actions
                     </th>
                   </tr>
@@ -596,9 +594,9 @@ export default function Admin() {
                       const busy = pendingUserId === row.user_id;
                       return (
                         <tr key={row.user_id} className="hover:bg-gray-50/80">
-                          <td className="px-4 py-3 text-gray-900">{row.email_address}</td>
-                          <td className="px-4 py-3 text-gray-600 font-mono text-xs">{row.user_id}</td>
-                          <td className="px-4 py-3">
+                          <td className="px-3 py-2 text-gray-900 break-words">{row.email_address}</td>
+                          <td className="px-3 py-2 text-gray-600 font-mono text-xs break-all">{row.user_id}</td>
+                          <td className="px-3 py-2">
                             <span
                               className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${
                                 isAdmin ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
@@ -607,7 +605,7 @@ export default function Admin() {
                               {row.user_group}
                             </span>
                           </td>
-                          <td className="px-4 py-3">
+                          <td className="px-3 py-2">
                             <div className="flex flex-wrap gap-2">
                               {!isAdmin && !isSelf && (
                                 <button
